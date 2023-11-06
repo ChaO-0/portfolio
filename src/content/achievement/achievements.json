@@ -1,0 +1,17 @@
+[
+	{
+		"number": 3,
+		"title": "Years of Experience",
+		"assetPath": "src/assets/star.png"
+	},
+	{
+		"number": 10,
+		"title": "Projects Completed",
+		"assetPath": "src/assets/code.png"
+	},
+	{
+		"number": 10,
+		"title": "Client Satisfied",
+		"assetPath": "src/assets/heart.png"
+	}
+]

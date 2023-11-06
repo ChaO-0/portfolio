@@ -1,0 +1,20 @@
+---
+import Achievement from "../Achievement/index.astro";
+import { getEntry } from "astro:content";
+
+const achievements = await getEntry("achievement", "achievements");
+---
+
+<div
+  class="mt-12 flex lg:justify-between justify-center gap-8 lg:max-w-[80%] text-center"
+>
+  {
+    achievements.data.map((achievement) => (
+      <Achievement
+        imgSource={achievement.assetPath}
+        numberOfAchievement={achievement.number}
+        achievementTitle={achievement.title}
+      />
+    ))
+  }
+</div>

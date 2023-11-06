@@ -1,0 +1,24 @@
+---
+import ProfileIllus from "../../assets/Kukang.png";
+import Arrow2 from "../../assets/arrow2.svg";
+---
+
+<div class="text-center relative m-auto pt-14 lg:pt-0">
+	<!-- <SvgImage icon="react" /> -->
+
+	<div
+		class="relative flex bg-[#fffffe] items-center justify-center rounded-full overflow-hidden w-[440px] h-[420px]"
+	>
+		<img class="h-[420px]" src={ProfileIllus.src} alt="profile illustration" />
+	</div>
+	<img
+		class="absolute lg:block hidden bottom-[-40px] left-44 h-3 -scale-x-100 rotate-45"
+		src={Arrow2.src}
+		alt=""
+	/>
+	<div
+		class="absolute lg:block hidden -bottom-[70px] text-[14px] w-[200px] left-[140px] -rotate-[20deg] text-[#eebbc3]"
+	>
+		It is me as a Cartoon :D
+	</div>
+</div>
