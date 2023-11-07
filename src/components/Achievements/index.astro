@@ -1,20 +1,28 @@
 ---
 import Achievement from "../Achievement/index.astro";
 import { getEntry } from "astro:content";
+import StarImg from "../../assets/star.png";
+import CodeImg from "../../assets/code.png";
+import HeartImg from "../../assets/heart.png";
 
-const achievements = await getEntry("achievement", "achievements");
+const paths = [StarImg.src, CodeImg.src, HeartImg.src];
+const achievementsEntry = await getEntry("achievement", "achievements");
+const achievements = achievementsEntry.data.map((achievement, index) => ({
+	...achievement,
+	assetPath: paths[index],
+}));
 ---
 
 <div
-  class="mt-12 flex lg:justify-between justify-center gap-8 lg:max-w-[80%] text-center"
+	class="mt-12 flex lg:justify-between justify-center md:gap-8 gap-4 lg:max-w-[80%] text-center"
 >
-  {
-    achievements.data.map((achievement) => (
-      <Achievement
-        imgSource={achievement.assetPath}
-        numberOfAchievement={achievement.number}
-        achievementTitle={achievement.title}
-      />
-    ))
-  }
+	{
+		achievements.map((achievement) => (
+			<Achievement
+				imgSource={achievement.assetPath}
+				numberOfAchievement={achievement.number}
+				achievementTitle={achievement.title}
+			/>
+		))
+	}
 </div>

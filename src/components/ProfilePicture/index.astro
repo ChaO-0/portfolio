@@ -7,9 +7,13 @@ import Arrow2 from "../../assets/arrow2.svg";
 	<!-- <SvgImage icon="react" /> -->
 
 	<div
-		class="relative flex bg-[#fffffe] items-center justify-center rounded-full overflow-hidden w-[440px] h-[420px]"
+		class="relative flex bg-[#fffffe] items-center justify-center rounded-full overflow-hidden md:w-[440px] w-[220px] md:h-[420px] h-[220px]"
 	>
-		<img class="h-[420px]" src={ProfileIllus.src} alt="profile illustration" />
+		<img
+			class="md:h-[420px] h-[220px]"
+			src={ProfileIllus.src}
+			alt="profile illustration"
+		/>
 	</div>
 	<img
 		class="absolute lg:block hidden bottom-[-40px] left-44 h-3 -scale-x-100 rotate-45"

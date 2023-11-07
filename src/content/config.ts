@@ -7,7 +7,6 @@ const achievementCollection = defineCollection({
 	schema: z.array(z.object({
 		number: z.number(),
 		title: z.string(),
-		assetPath: z.string()
 	}))
 });
 

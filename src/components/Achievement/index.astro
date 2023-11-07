@@ -1,25 +1,29 @@
 ---
 interface Props {
-  imgSource: string;
-  numberOfAchievement: number;
-  achievementTitle: string;
+	imgSource: string;
+	numberOfAchievement: number;
+	achievementTitle: string;
 }
 
 const { imgSource, numberOfAchievement, achievementTitle } = Astro.props;
 ---
 
-<div class="p-4 bg-[#b8c1ec] inline-block rounded-xl text-[#232946] w-[160px]">
-  <div class="flex">
-    <div class="flex justify-between w-full relative">
-      <div class="relative flex items-center w-[50px]">
-        <img class="max-w-none h-10" src={imgSource} alt="asd" />
-      </div>
-      <div class="flex flex-col items-start pl-[10px]">
-        <div class="flex text-[32px]">{numberOfAchievement}+</div>
-        <div class="opacity-60 text-[14px] leading-4 text-left font-bold">
-          {achievementTitle}
-        </div>
-      </div>
-    </div>
-  </div>
+<div
+	class="p-4 bg-[#b8c1ec] inline-block rounded-xl text-[#232946] md:w-[160px] w-[110px]"
+>
+	<div class="flex">
+		<div class="flex justify-between w-full relative">
+			<div class="relative flex items-center w-[50px]">
+				<img class="max-w-none md:h-10 h-6" src={imgSource} alt="asd" />
+			</div>
+			<div class="flex flex-col items-start pl-[10px]">
+				<div class="flex md:text-[32px]">{numberOfAchievement}+</div>
+				<div
+					class="opacity-60 md:text-[14px] text-[9px] md:leading-4 text-left font-bold"
+				>
+					{achievementTitle}
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
