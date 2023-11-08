@@ -10,7 +10,15 @@ const achievementCollection = defineCollection({
 	}))
 });
 
+const projectCollection = defineCollection({
+	type: 'data',
+	schema: z.array(z.object({
+		title: z.string()
+	}))
+})
+
 // 3. Export a single `collections` object to register your collection(s)
 export const collections = {
 	'achievement': achievementCollection,
+	'project': projectCollection
 };

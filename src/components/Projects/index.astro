@@ -1,0 +1,46 @@
+---
+import { getEntry } from "astro:content";
+import Project1 from "../../assets/projects/project1.png";
+import Project2 from "../../assets/projects/project2.png";
+import Project3 from "../../assets/projects/project3.png";
+import Project4 from "../../assets/projects/project4.png";
+
+const paths = [Project1.src, Project2.src, Project3.src, Project4.src];
+const projectEntry = await getEntry("project", "projects");
+console.log({ projectEntry });
+const projects = projectEntry.data.map((project, index) => ({
+	...project,
+	assetPath: paths[index],
+}));
+
+console.log({ projects });
+---
+
+<div class="bg-secondary h-screen">
+	<div class="container mx-auto text-main font-bold text-center">
+		<div class="inline-block relative before:marker-effect pt-16 z-10 text-6xl">
+			Projects
+		</div>
+		<div class="flex flex-wrap gap-14 pt-16 px-4 justify-center">
+			{
+				projects.map((project) => (
+					<div class="w-[420px] relative">
+						<a
+							class="border-main border-8 rounded-xl overflow-hidden block peer relative z-10"
+							href="#"
+						>
+							<img
+								src={project.assetPath}
+								alt="project"
+								class="hover:scale-110 transition-transform"
+							/>
+						</a>
+						<div class="absolute bg-main text-white pt-2 px-7 rounded-t-lg left-1/2 -translate-x-1/2 top-0 peer-hover:-top-8 transition-[top]">
+							{project.title}
+						</div>
+					</div>
+				))
+			}
+		</div>
+	</div>
+</div>
