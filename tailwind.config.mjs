@@ -56,7 +56,7 @@ export default {
 					height: '70px',
 					zIndex: -1,
 					transform: 'rotate(-4deg)',
-					width: '410px',
+					width: '320px',
 					margin: '0 -0.4em',
 					padding: '0.1em 0.4em',
 					borderRadius: '0.8em 0.3em',
@@ -66,7 +66,10 @@ export default {
 						rgba(212,216,240,0.7) 4%,
 						rgba(212,216,240,0.3)
 					)`,
-					boxDecorationBreak: 'clone'
+					boxDecorationBreak: 'clone',
+					'@media (min-width: 640px)': {
+						width: '400px'
+					}
 				},
 			})
 		}
