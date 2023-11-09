@@ -1,14 +1,18 @@
 [
 	{
-		"title": "Shortly"
+		"title": "Shortly",
+		"url": "https://shortifyshortener.vercel.app/"
 	},
 	{
-		"title": "Splitter"
+		"title": "Splitter",
+		"url": "https://angular-tip-calc.vercel.app/"
 	},
 	{
-		"title": "ToDo"
+		"title": "ToDo",
+		"url": "https://react-tailwind-todo-list.vercel.app/"
 	},
 	{
-		"title": "Chibiworld"
+		"title": "Chibiworld",
+		"url": "https://chibiworld.com"
 	}
 ]

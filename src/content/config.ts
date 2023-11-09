@@ -13,7 +13,8 @@ const achievementCollection = defineCollection({
 const projectCollection = defineCollection({
 	type: 'data',
 	schema: z.array(z.object({
-		title: z.string()
+		title: z.string(),
+		url: z.string()
 	}))
 })
 

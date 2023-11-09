@@ -1,66 +1,95 @@
 ---
 interface Props {
-  title: string;
+	title: string;
 }
+
+import ProfileImg from "../assets/Kukang.png";
 
 const { title } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tagbanwa&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-      rel="stylesheet"
-    />
-    <meta name="generator" content={Astro.generator} /><title>
-      {title}
-    </title></head
-  >
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="content-language" content="en-US" />
+		<meta
+			name="description"
+			content="I'm Christopher Yu, a Full Stack Developer specializing in JavaScript/TypeScript. Explore my portfolio and projects."
+		/>
+		<meta
+			name="keywords"
+			content="Christopher Yu, Full Stack Developer, JavaScript, TypeScript, Portfolio"
+			<meta
+			property="og:title"
+			content="Christopher Yu - Full Stack Developer"
+		/>
+		<meta
+			property="og:description"
+			content="I'm Christopher Yu, a Full Stack Developer specializing in JavaScript/TypeScript."
+		/>
+		<meta property="og:image" content={ProfileImg.src} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta
+			name="twitter:title"
+			content="Christopher Yu - Full Stack Developer"
+		/>
+		<meta
+			name="twitter:description"
+			content="I'm Christopher Yu, a Full Stack Developer specializing in JavaScript/TypeScript."
+		/></head
+	>>
+	<meta name="viewport" content="width=device-width" />
+	<link rel="canonical" href="https://www.christopher-yu.com" />
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link
+		href="https://fonts.googleapis.com/css2?family=Noto+Sans+Tagbanwa&family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+		rel="stylesheet"
+	/>
+	<meta name="generator" content={Astro.generator} /><title>
+		{title}
+	</title>
 
-  <body>
-    <slot />
-  </body>
+	<body>
+		<slot />
+	</body>
 
-  <style is:global>
-    :root {
-      --accent: 136, 58, 234;
-      --accent-light: 224, 204, 250;
-      --accent-dark: 49, 10, 101;
-      --accent-gradient: linear-gradient(
-        45deg,
-        rgb(var(--accent)),
-        rgb(var(--accent-light)) 30%,
-        white 60%
-      );
-    }
+	<style is:global>
+		:root {
+			--accent: 136, 58, 234;
+			--accent-light: 224, 204, 250;
+			--accent-dark: 49, 10, 101;
+			--accent-gradient: linear-gradient(
+				45deg,
+				rgb(var(--accent)),
+				rgb(var(--accent-light)) 30%,
+				white 60%
+			);
+		}
 
-    body {
-      margin: 0;
-      padding: 0;
-    }
+		body {
+			margin: 0;
+			padding: 0;
+		}
 
-    html {
-      font-family: "Poppins";
-      /* background: #13151a; */
-      /* background-size: 224px; */
-    }
-    code {
-      font-family:
-        Menlo,
-        Monaco,
-        Lucida Console,
-        Liberation Mono,
-        DejaVu Sans Mono,
-        Bitstream Vera Sans Mono,
-        Courier New,
-        monospace;
-    }
-  </style>
+		html {
+			font-family: "Poppins";
+			/* background: #13151a; */
+			/* background-size: 224px; */
+		}
+		code {
+			font-family:
+				Menlo,
+				Monaco,
+				Lucida Console,
+				Liberation Mono,
+				DejaVu Sans Mono,
+				Bitstream Vera Sans Mono,
+				Courier New,
+				monospace;
+		}
+	</style>
+
 </html>
