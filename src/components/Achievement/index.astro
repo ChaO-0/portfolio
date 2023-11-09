@@ -17,7 +17,9 @@ const { imgSource, numberOfAchievement, achievementTitle } = Astro.props;
 				<img class="max-w-none md:h-10 h-6" src={imgSource} alt="asd" />
 			</div>
 			<div class="flex flex-col items-start pl-[10px]">
-				<div class="flex md:text-[32px]">{numberOfAchievement}+</div>
+				<div class="flex lg:text-[32px] md:text-[24px]">
+					{numberOfAchievement}+
+				</div>
 				<div
 					class="opacity-60 md:text-[14px] text-[9px] md:leading-4 text-left font-bold"
 				>

@@ -1,7 +1,40 @@
-<div class="bg-pink h-screen">
+---
+import TypescriptImg from "../../assets/skills/typescript.png";
+import NestJsImg from "../../assets/skills/nestjs.png";
+import AstroJsImg from "../../assets/skills/astro.png";
+import GitImg from "../../assets/skills/git.png";
+import NeovimImg from "../../assets/skills/neovim.png";
+import NextJsImg from "../../assets/skills/nextjs.png";
+import NodeJsImg from "../../assets/skills/nodejs.png";
+import ReactJsImg from "../../assets/skills/reactjs.png";
+
+const skillAssets = [
+	TypescriptImg.src,
+	NestJsImg.src,
+	AstroJsImg.src,
+	GitImg.src,
+	NeovimImg.src,
+	NextJsImg.src,
+	NodeJsImg.src,
+	ReactJsImg.src,
+];
+---
+
+<div class="bg-pink pb-24">
 	<div class="container m-auto text-center">
-		<div class="inline-block relative pt-16 z-10 text-6xl font-bold">
+		<div
+			class="inline-block relative pt-16 z-10 text-6xl font-bold text-main before:marker-effect-skills"
+		>
 			Skills
+		</div>
+		<div class="flex flex-wrap justify-center gap-8 pt-8">
+			{
+				skillAssets.map((skillAsset) => (
+					<div class="bg-white rounded-xl p-4 w-[200px] mt-10">
+						<img src={skillAsset} alt="skill" />
+					</div>
+				))
+			}
 		</div>
 	</div>
 </div>
