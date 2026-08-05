@@ -52,29 +52,65 @@
 
 /* ---------------------------------------------------------------- keyframes */
 @keyframes blink {
-  0%, 49% { opacity: 1 }
-  50%, 100% { opacity: 0 }
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 @keyframes lineup {
-  0% { transform: scaleY(0); opacity: 0 }
-  25% { opacity: 0.9 }
-  100% { transform: scaleY(1); opacity: 0.28 }
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 0.28;
+  }
 }
 @keyframes scan {
-  0% { transform: translateY(-40px); opacity: 0 }
-  12%, 88% { opacity: 1 }
-  100% { transform: translateY(105vh); opacity: 0 }
+  0% {
+    transform: translateY(-40px);
+    opacity: 0;
+  }
+  12%,
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(105vh);
+    opacity: 0;
+  }
 }
 @keyframes glow {
-  0% { opacity: 0.1; transform: scale(0.85) }
-  100% { opacity: 0.34; transform: scale(1.05) }
+  0% {
+    opacity: 0.1;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 0.34;
+    transform: scale(1.05);
+  }
 }
 @keyframes preout {
-  to { transform: translateY(-101%); visibility: hidden }
+  to {
+    transform: translateY(-101%);
+    visibility: hidden;
+  }
 }
 @keyframes marquee {
-  from { transform: translateX(0) }
-  to { transform: translateX(-50%) }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 /* --------------------------------------------------------------- type scale */
@@ -234,7 +270,12 @@
     top: 0;
     height: 1px;
     animation: scan 2.4s 0.1s cubic-bezier(0.5, 0, 0.5, 1) both;
-    background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-accent),
+      transparent
+    );
     box-shadow: 0 0 26px 2px oklch(0.78 0.13 220 / 0.5);
   }
   /* the overlay leaves on its own schedule — JS only drives the counter */
@@ -268,7 +309,8 @@
     cursor: pointer;
     will-change: transform;
     /* --btn-x/y come from the magnetic pointer handler in motion.ts */
-    transform: translate(var(--btn-x, 0px), var(--btn-y, 0px)) scale(var(--btn-s, 1));
+    transform: translate(var(--btn-x, 0px), var(--btn-y, 0px))
+      scale(var(--btn-s, 1));
     transition:
       transform 0.5s var(--ease-expo),
       box-shadow 0.5s var(--ease-expo),
@@ -383,7 +425,8 @@
   .flip > span > span {
     display: block;
     transition:
-      transform var(--flip-dur, 0.46s) calc(var(--i) * var(--flip-step, 0.022s)) var(--ease-expo),
+      transform var(--flip-dur, 0.46s) calc(var(--i) * var(--flip-step, 0.022s))
+        var(--ease-expo),
       color 0.3s calc(var(--i) * var(--flip-step, 0.022s)) linear;
   }
   .flip > span > span > span {
@@ -449,7 +492,9 @@
     display: block;
     height: 1.5px;
     background: var(--color-paper);
-    transition: transform 0.4s var(--ease-expo), opacity 0.3s;
+    transition:
+      transform 0.4s var(--ease-expo),
+      opacity 0.3s;
   }
   #burger[aria-expanded="true"] > span:nth-child(1) {
     transform: translateY(3.2px) rotate(45deg);
@@ -594,7 +639,11 @@
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.5s;
-    background: linear-gradient(to top, oklch(0.78 0.13 220 / 0.14), transparent 60%);
+    background: linear-gradient(
+      to top,
+      oklch(0.78 0.13 220 / 0.14),
+      transparent 60%
+    );
   }
   .frame:hover::after {
     opacity: 1;
@@ -607,7 +656,9 @@
     height: 20px;
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.45s var(--ease-expo), transform 0.55s var(--ease-expo);
+    transition:
+      opacity 0.45s var(--ease-expo),
+      transform 0.55s var(--ease-expo);
   }
   .frame:hover > span {
     opacity: 1;
@@ -662,7 +713,9 @@
     height: 2px;
     background: rgba(233, 237, 245, 0.16);
     transform-origin: left;
-    transition: background 0.4s, height 0.35s;
+    transition:
+      background 0.4s,
+      height 0.35s;
   }
   .ps:first-child .ps-rule {
     background: var(--color-accent);
@@ -696,7 +749,9 @@
     color: var(--color-accent);
   }
   .stack-cell dd {
-    transition: transform 0.45s var(--ease-expo), color 0.3s;
+    transition:
+      transform 0.45s var(--ease-expo),
+      color 0.3s;
     transition-delay: calc(var(--i, 0) * 0.035s);
   }
   .stack-cell:hover dd {
@@ -716,7 +771,9 @@
   /* ----------------------------------------------------------- timeline rows */
   .tl {
     position: relative;
-    transition: padding-left 0.5s var(--ease-expo), background 0.5s;
+    transition:
+      padding-left 0.5s var(--ease-expo),
+      background 0.5s;
   }
   .tl::before {
     content: "";
@@ -805,7 +862,11 @@
     pointer-events: none;
     opacity: 0;
     will-change: transform;
-    transition: opacity 0.3s, width 0.3s, height 0.3s, margin 0.3s;
+    transition:
+      opacity 0.3s,
+      width 0.3s,
+      height 0.3s,
+      margin 0.3s;
   }
   /* over a labelled target the ring takes over, so the dot gets out of the way */
   .dot[data-big] {

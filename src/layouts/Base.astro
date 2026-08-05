@@ -8,6 +8,30 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+
+// og:image and canonical both require absolute URLs. Astro.site comes from
+// astro.config.mjs, so these follow the domain automatically.
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL("/og.png", Astro.site);
+
+// Person schema is what makes a search for his name resolve to him rather than to
+// a namesake, and it's what feeds a knowledge panel.
+const person = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  jobTitle: site.role,
+  description,
+  url: canonical.href,
+  image: ogImage.href,
+  email: `mailto:${site.email}`,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: site.location.split(",")[0],
+    addressCountry: "ID",
+  },
+  sameAs: [site.github, site.linkedin],
+};
 ---
 
 <!doctype html>
@@ -16,6 +40,7 @@ const { title, description } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
     <meta name="generator" content={Astro.generator} />
 
     <title>{title}</title>
@@ -23,13 +48,21 @@ const { title, description } = Astro.props;
     <meta name="author" content={site.name} />
     <meta name="theme-color" content="#0a0e18" />
 
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content="profile" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:locale" content="en" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name} — ${site.role}`} />
+
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -37,6 +70,8 @@ const { title, description } = Astro.props;
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Space+Grotesk:wght@300..700&family=Geist+Mono:wght@300..600&display=swap"
     />
+
+    <script type="application/ld+json" set:html={JSON.stringify(person)} is:inline />
   </head>
   <body>
     <slot />

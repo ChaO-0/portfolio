@@ -1,4 +1,4 @@
-# Portfolio — Christopher Hendratno
+# Portfolio — Christopher Yu
 
 Single-page portfolio. Astro 7 (static), Tailwind 4, GSAP ScrollTrigger, three.js for the hero.
 
@@ -23,6 +23,18 @@ Animation splits by cost: anything CSS can do (button fills, label rolls, card
 spotlights, corner brackets) is CSS driven by custom properties. GSAP only owns
 what needs scroll position. Repeated markup — the preloader ticks, the marquee,
 the contribution grid — is rendered at build time, not assembled by JS.
+
+## Changing the domain
+
+`site` in `astro.config.mjs` is the **only** place the origin appears. The canonical
+link, `og:url`, the absolute `og:image` URL, `/sitemap.xml` and `/robots.txt` all
+derive from it. It's `https://christopheryu.com` — change that one line if the domain ever moves.
+
+`public/og.png` (1200×630) is the link-preview card, generated from
+`.../scratchpad/og-card.html`. It's a purpose-built card rather than a cropped
+screenshot of the hero: previews render around 500px wide in most feeds, where the
+hero's 116px headline would be illegible. Regenerate it if the positioning line or
+the availability changes.
 
 ## Notes
 
