@@ -203,7 +203,7 @@ export const timeline = [
 export const pricing = [
   {
     label: "AUDIT",
-    price: "$400",
+    price: "$399",
     unit: "FIXED",
     body: "Three or four days. I read the codebase, or the brief, and hand back what's broken, what it costs to fix and what I'd do first.",
     includes: [
