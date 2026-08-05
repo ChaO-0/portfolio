@@ -369,6 +369,12 @@
     transform: translateX(0);
   }
 
+  /* Mesh cells tile exactly in layout, but buttons are fractional sizes (a 53.4px
+     tall button / 4 rows = 13.35px), so every cell boundary straddles a device
+     pixel. Each cell carries a transform and is therefore rasterised on its own,
+     and two partial coverages of the same physical pixel do not composite to
+     opaque — which showed as hairlines across the fill. The colour-matched 1px
+     spread below bleeds each cell over its seams; same colour, so invisible. */
   .btn-p {
     background: var(--color-accent);
     color: var(--color-ink);
@@ -379,6 +385,7 @@
   }
   .btn-p .btn-mesh > i {
     background: var(--color-ink);
+    box-shadow: 0 0 0 1px var(--color-ink);
   }
   .btn-p:hover {
     box-shadow: 0 14px 38px -14px oklch(0.78 0.13 220 / 0.6);
@@ -398,6 +405,7 @@
   }
   .btn-s .btn-mesh > i {
     background: var(--color-accent);
+    box-shadow: 0 0 0 1px var(--color-accent);
   }
   .btn-s:hover {
     border-color: var(--color-accent);
