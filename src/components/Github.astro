@@ -31,8 +31,10 @@ try {
       weeks[weeks.length - 1][dow] = day;
     }
   }
-} catch {
-  // offline build — section is omitted
+} catch (err) {
+  // The section omits itself below, which is the right visual outcome — but a
+  // silent omission is how you discover months later that it broke. Say so.
+  console.warn("[github] contributions fetch failed; omitting the section.", err);
 }
 
 // level 0 is the empty state; 1–4 ramp the accent

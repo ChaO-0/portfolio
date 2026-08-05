@@ -35,6 +35,16 @@
     color: var(--color-ink);
   }
 
+  /* The h-* type utilities each used to carry `margin: 0`, which collided with a
+     margin utility on the same element: both live in the utilities layer, so which
+     one won came down to Tailwind's emit order. Resetting here instead — base always
+     loses to utilities, so a margin utility on a heading now reliably wins. */
+  h1,
+  h2,
+  h3 {
+    margin: 0;
+  }
+
   canvas {
     display: block;
   }
@@ -76,15 +86,17 @@
   letter-spacing: 0.22em;
 }
 @utility h-hero {
-  margin: 0;
   font-family: var(--font-display);
   font-size: clamp(48px, 7.4vw, 116px);
   font-weight: 500;
   line-height: 0.94;
   letter-spacing: -0.045em;
+
+  @media (width <= 600px) {
+    font-size: clamp(34px, 10.5vw, 54px);
+  }
 }
 @utility h-sec {
-  margin: 0;
   font-family: var(--font-display);
   font-size: clamp(34px, 4.4vw, 64px);
   font-weight: 500;
@@ -92,15 +104,17 @@
   letter-spacing: -0.035em;
 }
 @utility h-big {
-  margin: 0;
   font-family: var(--font-display);
   font-size: clamp(38px, 5.6vw, 86px);
   font-weight: 500;
   line-height: 1;
   letter-spacing: -0.04em;
+
+  @media (width <= 900px) {
+    font-size: clamp(30px, 8vw, 48px);
+  }
 }
 @utility h-proj {
-  margin: 0;
   font-family: var(--font-display);
   font-size: clamp(32px, 3.4vw, 50px);
   font-weight: 500;
@@ -108,7 +122,6 @@
   letter-spacing: -0.035em;
 }
 @utility h-card {
-  margin: 0;
   font-family: var(--font-display);
   font-size: 25px;
   font-weight: 500;
@@ -116,7 +129,6 @@
   letter-spacing: -0.02em;
 }
 @utility h-step {
-  margin: 0;
   font-family: var(--font-display);
   font-size: 21px;
   font-weight: 500;
@@ -124,7 +136,6 @@
   letter-spacing: -0.02em;
 }
 @utility h-cta {
-  margin: 0;
   font-family: var(--font-display);
   font-size: clamp(40px, 6.4vw, 96px);
   font-weight: 500;

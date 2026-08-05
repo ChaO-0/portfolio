@@ -28,7 +28,7 @@ export const nav = [
 ];
 
 export const heroStats = [
-  "GMT+8 · OVERLAPS EU & APAC",
+  `${site.timezone} · OVERLAPS EU & APAC`,
   "MONARK",
   "STENCIL",
   "CLASSPORTAL",
