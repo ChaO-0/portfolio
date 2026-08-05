@@ -203,7 +203,7 @@ export const timeline = [
 export const pricing = [
   {
     label: "AUDIT",
-    price: "$900",
+    price: "$400",
     unit: "FIXED",
     body: "Three or four days. I read the codebase, or the brief, and hand back what's broken, what it costs to fix and what I'd do first.",
     includes: [
@@ -214,7 +214,7 @@ export const pricing = [
   },
   {
     label: "TECHNICAL PLAN",
-    price: "$2,400",
+    price: "$999",
     unit: "FIXED",
     body: "One week. Data model, architecture, build plan and a fixed quote for the build. Credited back if you go ahead.",
     includes: [
@@ -226,7 +226,7 @@ export const pricing = [
   {
     label: "MVP BUILD",
     prefix: "from",
-    price: "$9,800",
+    price: "$3,999",
     featured: true,
     body: "Six to eight weeks, fixed scope and fixed price. A deployed product, your repos, your infrastructure.",
     includes: [
@@ -237,7 +237,7 @@ export const pricing = [
   },
   {
     label: "EMBEDDED",
-    price: "$5,200",
+    price: "$2,499",
     unit: "/ MONTH",
     body: "Dedicated capacity in your team or your agency's. Minimum one month, two weeks' notice to stop.",
     includes: ["Your board, your standups", "White-label for agencies", "EU & UK morning overlap"],
