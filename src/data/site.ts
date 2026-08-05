@@ -27,12 +27,11 @@ export const nav = [
   { label: "Pricing", href: "#pricing" },
 ];
 
-export const heroStats = [
-  `${site.timezone} · OVERLAPS EU & APAC`,
-  "MONARK",
-  "STENCIL",
-  "CLASSPORTAL",
-];
+// Shipped work only. The timezone lives on the portrait badge, the drawer and the
+// footer, and the EU overlap is a practical detail that belongs in the Embedded
+// tier where it answers a question the buyer is already asking — not volunteered
+// here, in a row whose other items are proof.
+export const heroStats = ["MONARK", "STENCIL", "CLASSPORTAL"];
 
 export const preloadSteps = [
   "resolving dependencies",
@@ -146,7 +145,7 @@ export const process = [
 
 export const bio = [
   "I'm Christopher. I build web products end to end: the database, the API, the dashboard, the deploy.",
-  "Five years across three very different rooms: a blockchain company where mistakes are expensive and public, a fintech where the ledger has to balance every time, and a digital agency where the deadline is the deadline. Different constraints, same job: make the thing work.",
+  "Five years across three very different rooms: a year at a blockchain company where mistakes are expensive and public, three at a fintech where the ledger has to balance every time, and a year at a digital agency where the deadline is the deadline. Different constraints, same job: make the thing work.",
   "Before that I played CTF competitively. Strange hobby, but it turned out to be useful: I spent years looking for the ways software breaks, so I write it differently. Security review happens while the code is written, not in an audit six months later.",
 ];
 
@@ -190,12 +189,12 @@ export const timeline = [
     what: "Contract integration, indexing and wallet-facing services with real value at stake.",
   },
   {
-    when: "2022 — 2024",
+    when: "2022 — 2025",
     where: "Fintech",
     what: "Payments, ledgers and reconciliation. Correctness under load, with regulators reading over your shoulder.",
   },
   {
-    when: "2024 — NOW",
+    when: "2025 — NOW",
     where: "Digital agency",
     what: "Client products on fixed timelines, shipping alongside designers, PMs and other people's codebases.",
   },
