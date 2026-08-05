@@ -72,6 +72,11 @@ const person = {
     />
 
     <script type="application/ld+json" set:html={JSON.stringify(person)} is:inline />
+
+    {/* Vercel Web Analytics. Vercel's edge serves this path, so it 404s anywhere
+        else — including `astro dev`, hence the PROD gate keeping the dev console
+        clean. Needs Analytics switched on in the project's Vercel dashboard. */}
+    {import.meta.env.PROD && <script is:inline defer src="/_vercel/insights/script.js" />}
   </head>
   <body>
     <slot />
