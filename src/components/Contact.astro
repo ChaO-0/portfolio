@@ -1,0 +1,56 @@
+---
+import { site } from "../data/site";
+import Button from "./Button.astro";
+---
+
+<section
+  id="contact"
+  class="lattice relative z-[2] flex min-h-screen items-center overflow-hidden border-t border-paper/8 bg-ink px-[5vw] pt-[130px] pb-[90px]"
+>
+  <div
+    id="ctaGlow"
+    class="pointer-events-none absolute top-[40%] left-1/2 -ml-[550px] size-[1100px] rounded-full"
+    style="background:radial-gradient(circle,oklch(.78 .13 220/.13) 0%,oklch(.78 .13 220/.05) 36%,transparent 70%)"
+  >
+  </div>
+
+  <div class="relative mx-auto max-w-[1500px] text-center">
+    <div data-rv class="label mb-[30px] text-accent">● {site.availability}</div>
+
+    <h2 class="h-cta mx-auto max-w-[18ch]">
+      <span class="mask"><span>Tell me what you're building.</span></span>
+    </h2>
+
+    <p data-rv class="mx-auto mt-7 mb-0 max-w-[56ch] text-[17px]/[1.6] text-paper/55 text-pretty">
+      Thirty minutes, no pitch deck. If it isn't a fit I'll tell you on the call and point you
+      somewhere better.
+    </p>
+
+    <div data-rv class="mt-[42px] flex flex-wrap justify-center gap-3">
+      <Button
+        href={site.calendly}
+        label={site.cta}
+        target="_blank"
+        class="px-9 py-[19px] text-[15px]"
+      />
+      <Button
+        href={site.linkedin}
+        label="LinkedIn"
+        variant="s"
+        target="_blank"
+        class="px-9 py-[19px] text-[15px]"
+      />
+      <Button
+        href={site.github}
+        label="GitHub"
+        variant="s"
+        target="_blank"
+        class="px-9 py-[19px] text-[15px]"
+      />
+    </div>
+
+    <div data-rv class="mt-[34px] font-mono text-[12.5px]/none text-paper/32">
+      OR EMAIL: <a href={`mailto:${site.email}`} class="link">{site.email.toUpperCase()}</a>
+    </div>
+  </div>
+</section>

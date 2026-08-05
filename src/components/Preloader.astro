@@ -1,0 +1,139 @@
+---
+import { preloadSteps, site } from "../data/site";
+
+const lines = Array.from({ length: 18 }, (_, i) => ({
+  left: (i * (100 / 18) + 1).toFixed(2),
+  delay: (i * 0.05).toFixed(3),
+}));
+
+const ticks = Array.from({ length: 40 }, (_, i) => (i % 8 === 0 ? 16 : 8));
+---
+
+<div id="pre" class="lattice fixed inset-0 z-[200] overflow-hidden bg-ink">
+  <div class="pre-glow"></div>
+
+  <div class="absolute inset-0">
+    {
+      lines.map((l) => (
+        <span class="pre-line" style={`left:${l.left}%;animation-delay:${l.delay}s`} />
+      ))
+    }
+  </div>
+
+  <div class="pre-scan"></div>
+
+  <div class="absolute top-[5vh] left-[5vw] flex items-center gap-[11px]">
+    <span class="size-[7px] animate-[blink_1s_step-end_infinite] bg-accent"></span>
+    <span class="label text-paper/50">
+      {site.name.toUpperCase()} · {site.role.toUpperCase()}
+    </span>
+  </div>
+
+  <div
+    class="absolute top-1/2 left-[5vw] flex -translate-y-1/2 flex-col gap-3 font-mono text-[13px]/none"
+  >
+    {
+      preloadSteps.map((step) => (
+        <div class="st flex items-center gap-4 opacity-[.22]">
+          <span class="st-d size-[6px] border border-paper/50"></span>
+          <span class="w-[270px]">{step}</span>
+          <span class="st-k text-accent opacity-0">OK</span>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="absolute bottom-[6vh] left-[5vw] right-[5vw]">
+    <div class="mb-[18px] flex items-end justify-between">
+      <div id="preWord" class="font-mono text-[14px]/none text-accent">initialising</div>
+      <div class="flex items-baseline gap-2">
+        <div
+          id="preNum"
+          class="font-display text-[150px]/[.76] font-medium tracking-[-.055em]"
+        >
+          00
+        </div>
+        <span class="font-mono text-[17px]/none text-paper/35">%</span>
+      </div>
+    </div>
+    <div id="preTicks" class="flex h-4 items-end gap-1.5">
+      {ticks.map((h) => <span class="tk flex-1 bg-paper/16" style={`height:${h}px`} />)}
+    </div>
+    <div class="relative mt-2.5 h-px bg-paper/14">
+      <div
+        id="preBar"
+        class="absolute -top-px left-0 h-[3px] w-0 bg-accent shadow-[0_0_14px_var(--color-accent)]"
+      >
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // The CSS `preout` animation on #pre removes the overlay on its own schedule,
+  // so this loop is decoration only — if it never runs, the page still reveals.
+  const pre = document.getElementById("pre")!;
+  const num = document.getElementById("preNum")!;
+  const bar = document.getElementById("preBar")!;
+  const word = document.getElementById("preWord")!;
+  const words = ["initialising", "compiling", "connecting", "ready"];
+  const steps = [...pre.querySelectorAll<HTMLElement>(".st")];
+  const ticks = [...pre.querySelectorAll<HTMLElement>(".tk")];
+
+  const DURATION = 2600;
+  const start = performance.now();
+
+  const draw = (e: number) => {
+    num.textContent = String(Math.round(e * 100)).padStart(2, "0");
+    bar.style.width = e * 100 + "%";
+    word.textContent = words[Math.min(3, Math.floor(e * 4))];
+
+    ticks.forEach((t, i) => {
+      const on = i / ticks.length <= e;
+      t.style.background = on ? "var(--color-accent)" : "";
+      t.style.boxShadow = on && i / ticks.length > e - 0.07 ? "0 0 10px var(--color-accent)" : "";
+    });
+
+    steps.forEach((row, i) => {
+      const on = e >= (i + 1) * 0.235;
+      row.style.opacity = on ? "1" : e >= i * 0.235 ? ".55" : ".22";
+      row.querySelector<HTMLElement>(".st-d")!.style.background = on
+        ? "var(--color-accent)"
+        : "transparent";
+      row.querySelector<HTMLElement>(".st-k")!.style.opacity = on ? "1" : "0";
+    });
+  };
+
+  let done = false;
+  const advance = () => {
+    if (done) return;
+    const p = Math.min(1, (performance.now() - start) / DURATION);
+    // easeInOutQuad, so the count feels like it settles rather than stops
+    draw(p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+    if (p >= 1) done = true;
+  };
+
+  // rAF alone is not enough here. During load it stalls while fonts, the module
+  // graph and WebGL init contend for the main thread, which freezes the count on
+  // a partial number — while the CSS panel animation keeps wall-clock time and
+  // slides away regardless. The interval keeps it moving through those stalls.
+  const frame = () => {
+    advance();
+    if (!done) requestAnimationFrame(frame);
+  };
+  requestAnimationFrame(frame);
+
+  const timer = setInterval(() => {
+    advance();
+    if (done) clearInterval(timer);
+  }, 60);
+
+  // last resort: the panel must never leave on a partial number
+  setTimeout(() => {
+    if (!done) {
+      done = true;
+      draw(1);
+    }
+    clearInterval(timer);
+  }, DURATION + 150);
+</script>

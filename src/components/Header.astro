@@ -1,0 +1,41 @@
+---
+import { nav, site } from "../data/site";
+import Button from "./Button.astro";
+import Flip from "./Flip.astro";
+---
+
+<header
+  class="fixed inset-x-0 top-0 z-[120] flex items-center justify-between border-b border-paper/7 bg-ink/70 px-[5vw] py-[18px] backdrop-blur-[14px]"
+>
+  <a href="#top" aria-label={site.name} class="flex items-center gap-2.5">
+    <span
+      class="grid size-6 place-items-center border border-accent font-mono text-[10px]/none font-medium text-accent"
+      >{site.name.split(" ").map((word) => word[0]).join("")}</span
+    >
+    <span class="text-[14.5px]/none font-medium">{site.name}</span>
+  </a>
+
+  <nav class="flex items-center gap-[26px] font-mono text-[12.5px]/none">
+    <span id="navLinks" class="flex items-center gap-[26px]">
+      {
+        nav.map((item) => (
+          <a href={item.href} aria-label={item.label} class="hx text-paper/55">
+            <Flip text={item.label.toUpperCase()} />
+            <span class="hx-rule" />
+          </a>
+        ))
+      }
+    </span>
+
+    <Button
+      href={site.calendly}
+      label={site.ctaShort}
+      target="_blank"
+      class="px-[18px] py-[11px] text-[12.5px]"
+    />
+
+    <button id="burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="drawer">
+      <span></span><span></span>
+    </button>
+  </nav>
+</header>

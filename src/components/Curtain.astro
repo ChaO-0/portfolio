@@ -1,0 +1,92 @@
+---
+import { site, statement } from "../data/site";
+import Button from "./Button.astro";
+---
+
+<div id="curtainRun" class="lattice relative z-[2] h-[230vh] bg-ink">
+  <section id="statement" class="sticky top-0 h-screen overflow-hidden bg-ink">
+    <!-- the resolution, revealed as the panel above it slides away -->
+    <div id="curtBack" class="absolute inset-0 flex items-center px-[5vw] opacity-25">
+      <div class="mx-auto w-full max-w-[1500px]">
+        <div class="label mb-7 text-accent">{statement.fix.label}</div>
+        <h2 class="h-big max-w-[24ch] max-[900px]:text-[clamp(30px,8vw,48px)]">
+          {statement.fix.heading}
+        </h2>
+        <p class="mt-[30px] mb-0 max-w-[54ch] text-[17px]/[1.6] text-paper/58 text-pretty">
+          {statement.fix.body}
+        </p>
+        <Button
+          href={site.calendly}
+          label={site.cta}
+          target="_blank"
+          class="mt-[38px] px-[30px] py-[17px]"
+        />
+      </div>
+    </div>
+
+    <!-- the problem, which scrolls up and out of the way -->
+    <div
+      id="curtFront"
+      class="lattice absolute inset-0 box-border bg-ink px-[3vw] py-[3.5vh] shadow-[0_40px_80px_-20px_rgba(0,0,0,.9)] will-change-transform"
+    >
+      <div
+        class="relative flex h-full items-center overflow-hidden border border-paper/14 px-[4vw]"
+      >
+        <canvas
+          id="curtCv"
+          aria-hidden="true"
+          width="2400"
+          height="1400"
+          class="absolute inset-0 size-full opacity-55"></canvas>
+        <div
+          class="absolute inset-0"
+          style="background:radial-gradient(120% 90% at 30% 50%,transparent 20%,rgba(10,14,24,.72) 80%)"
+        >
+        </div>
+
+        <div id="curtInner" class="relative mx-auto w-full max-w-[1500px] will-change-transform">
+          <div class="label mb-7 text-paper/45">{statement.problem.label}</div>
+          <h2 class="h-big max-w-[26ch] max-[900px]:text-[clamp(30px,8vw,48px)]">
+            {statement.problem.heading}
+          </h2>
+          <p class="mt-[30px] mb-0 max-w-[54ch] text-[17px]/[1.6] text-paper/55 text-pretty">
+            {statement.problem.body}
+          </p>
+        </div>
+
+        <div
+          class="absolute bottom-[34px] left-[4vw] flex items-center gap-3 font-mono text-[11px]/none text-paper/35"
+        >
+          <span>KEEP SCROLLING</span><span id="curtArrow" class="inline-block">↑</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  /* the front panel only slides away on scroll, so without motion both halves
+     have to be laid out normally or "the fix" would never be readable */
+  @media (prefers-reduced-motion: reduce) {
+    #curtainRun {
+      height: auto;
+    }
+    #statement {
+      position: static;
+      height: auto;
+    }
+    #curtFront,
+    #curtBack {
+      position: static;
+      opacity: 1;
+    }
+    #curtFront > div {
+      height: auto;
+      padding-top: 12vh;
+      padding-bottom: 12vh;
+    }
+    #curtCv {
+      display: none;
+    }
+  }
+</style>

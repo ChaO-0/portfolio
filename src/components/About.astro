@@ -1,0 +1,87 @@
+---
+import { Image } from "astro:assets";
+import portrait from "../assets/portrait.png";
+import { bio, facts, site } from "../data/site";
+
+const [first, last] = site.name.split(" ");
+---
+
+<section
+  id="about"
+  class="lattice relative z-[2] border-t border-paper/8 bg-ink px-[5vw] py-[120px]"
+>
+  <div
+    class="mx-auto grid max-w-[1500px] grid-cols-1 items-start gap-20 min-[900px]:[grid-template-columns:.85fr_1.15fr]"
+  >
+    {/* the cutout overhangs its frame on the left and below, so nothing here clips */}
+    <div data-rv class="relative pt-[52px]">
+      <div class="relative aspect-[1/1.12]">
+        <div
+          class="absolute top-0 right-0 bottom-[9%] left-[6%] rounded-[20px] border border-accent"
+        >
+        </div>
+
+        <div
+          class="absolute top-0 right-0 bottom-[9%] left-[6%] overflow-hidden rounded-[20px]"
+        >
+          <div
+            class="absolute top-[46%] left-1/2 h-[96%] w-[118%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+            style="background:radial-gradient(circle,oklch(.78 .13 220/.17) 0%,oklch(.78 .13 220/.05) 42%,transparent 70%)"
+          >
+          </div>
+        </div>
+
+        <Image
+          id="portrait"
+          src={portrait}
+          alt={site.name}
+          widths={[600, 900, 1200]}
+          sizes="(max-width: 1023px) 90vw, 32vw"
+          class="absolute bottom-[2%] left-0 z-[2] block w-full drop-shadow-[0_30px_60px_rgba(0,0,0,.55)]"
+        />
+
+        <div
+          class="absolute right-[6%] bottom-[14%] z-[3] rounded-full bg-accent px-3.5 py-[9px] font-mono text-[11px]/none font-semibold text-ink"
+        >
+          {site.location.split(",")[0].toUpperCase()} · {site.timezone}
+        </div>
+
+        <div
+          class="absolute bottom-[5%] left-0 z-[3] font-display text-[clamp(34px,4.2vw,62px)]/[.92] font-bold tracking-[-.04em] [text-shadow:0_6px_30px_rgba(10,14,24,.85)]"
+        >
+          {first}<br />{last}
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="mb-11 flex items-baseline justify-between">
+        <h2 class="h-sec"><span class="mask"><span>About</span></span></h2>
+        <span data-px>04 / BACKGROUND</span>
+      </div>
+
+      <p data-rv class="m-0 mb-[22px] max-w-[56ch] text-[19px]/[1.55] text-paper/82 text-pretty">
+        {bio[0]}
+      </p>
+      <p data-rv class="m-0 mb-[22px] max-w-[60ch] text-[16px]/[1.65] text-paper/52 text-pretty">
+        {bio[1]}
+      </p>
+      <p data-rv class="m-0 mb-10 max-w-[60ch] text-[16px]/[1.65] text-paper/52 text-pretty">
+        {bio[2]}
+      </p>
+
+      <dl data-rv data-rv-fade class="hair-grid m-0 grid-cols-3">
+        {
+          facts.map((f) => (
+            <div class="px-[22px] py-[26px]">
+              <dt class="stat text-accent" data-count>
+                {f.n}
+              </dt>
+              <dd class="m-0 mt-2.5 text-[13px]/[1.5] text-paper/50">{f.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>

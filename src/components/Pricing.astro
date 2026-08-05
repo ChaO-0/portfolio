@@ -1,0 +1,94 @@
+---
+import { pricing } from "../data/site";
+---
+
+<section
+  id="pricing"
+  class="lattice relative z-[2] border-t border-paper/8 bg-ink px-[5vw] py-[120px]"
+>
+  <div class="mx-auto max-w-[1500px]">
+    <div class="mb-5 flex items-baseline justify-between">
+      <h2 class="h-sec"><span class="mask"><span>Engagements</span></span></h2>
+      <span data-px>05 / PRICING</span>
+    </div>
+
+    <p data-rv class="m-0 mb-7 max-w-[64ch] text-[16px]/[1.6] text-paper/50 text-pretty">
+      Fixed prices, not hourly. You know the number before the work starts, and it doesn't move
+      unless the scope does. For comparison, agencies quote a build of this scope at $15,000–60,000.
+    </p>
+
+    {/* the discount is named and dated, so raising it later is a published schedule */}
+    <div
+      data-rv
+      class="mb-14 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-l-2 border-accent pl-4"
+    >
+      <span class="font-mono text-[11.5px]/none tracking-[.12em] text-accent">
+        FOUNDING-CLIENT PRICING
+      </span>
+      <span class="text-[14px]/[1.5] text-paper/50">
+        The first three projects, held through Q1 2027.
+      </span>
+    </div>
+
+    <div class="hair-grid [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]">
+      {
+        pricing.map((tier) => (
+          <article
+            data-rv
+            data-rv-fade
+            class:list={[
+              "spot flex flex-col px-8 pt-[38px] pb-[42px]",
+              tier.featured && "outline outline-accent -outline-offset-1",
+            ]}
+          >
+            {tier.featured && (
+              <div class="flag absolute top-0 right-0 z-[2] bg-accent px-3 py-1.5 font-mono text-[10.5px]/none font-semibold text-ink">
+                RECOMMENDED
+              </div>
+            )}
+
+            <div
+              class:list={[
+                "mb-[26px] font-mono text-[11.5px]/none",
+                tier.featured ? "text-accent" : "text-paper/40",
+              ]}
+            >
+              {tier.label}
+            </div>
+
+            <div class="mb-5 flex items-baseline gap-2">
+              {tier.prefix && (
+                <span class="font-display text-[26px]/none text-paper/45">{tier.prefix}</span>
+              )}
+              <span class="stat" data-count>
+                {tier.price}
+              </span>
+              {tier.unit && (
+                <span class="font-mono text-[13px]/none text-paper/40">{tier.unit}</span>
+              )}
+            </div>
+
+            <p class="m-0 mb-6 text-[14.5px]/[1.6] text-paper/52">{tier.body}</p>
+
+            <div class="mt-auto flex flex-col gap-2.5 text-[13.5px]/[1.4] text-paper/62">
+              {tier.includes.map((line) => (
+                <span>{line}</span>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    {/* names what moves the "from", so the page qualifies before a call does */}
+    <p data-rv class="m-0 mt-[26px] max-w-[70ch] text-[14px]/[1.6] text-paper/45 text-pretty">
+      Multiple user roles, money movement, multi-tenancy or a migration from an existing system move
+      the number. The plan says by how much.
+    </p>
+
+    <p data-rv class="m-0 mt-3 max-w-[70ch] text-[13.5px]/[1.6] text-paper/38">
+      Prices in USD. Builds are 40% to start and the remainder on delivery; retainers are invoiced
+      monthly in advance. A rescue or a single integration is quoted flat after the scope call.
+    </p>
+  </div>
+</section>

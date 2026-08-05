@@ -1,0 +1,38 @@
+---
+import { services } from "../data/site";
+---
+
+<section
+  id="services"
+  class="lattice relative z-[2] border-t border-paper/8 bg-ink px-[5vw] py-[120px]"
+>
+  <div class="mx-auto max-w-[1500px]">
+    <div class="mb-16 flex items-baseline justify-between">
+      <h2 class="h-sec"><span class="mask"><span>What I build</span></span></h2>
+      <span data-px>01 / SERVICES</span>
+    </div>
+
+    <div class="hair-grid [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
+      {
+        services.map((s) => (
+          <article data-rv data-rv-fade class="sv spot px-[34px] pt-10 pb-[46px]">
+            <div class="sv-n mb-[26px] font-mono text-[11.5px]/none text-accent">{s.n}</div>
+            <h3 class="h-card mb-3.5">{s.title}</h3>
+            <p class="m-0 mb-[22px] text-[14.5px]/[1.6] text-paper/52 text-pretty">{s.body}</p>
+            <div class="flex flex-wrap gap-[7px]">
+              {s.tags.map((t) => (
+                <span class="tag">{t}</span>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <p data-rv class="m-0 mt-[34px] max-w-[70ch] text-[14.5px]/[1.6] text-paper/42 text-pretty">
+      You don't need to arrive with designs. Dashboards, admin panels and product UI I lay out
+      cleanly myself, from a brief or a rough sketch. If you already have a designer or a brand
+      system, I'll build to it exactly.
+    </p>
+  </div>
+</section>

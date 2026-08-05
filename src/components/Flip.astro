@@ -1,0 +1,26 @@
+---
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+
+// spaces become non-breaking: each glyph is its own block, so a plain space
+// would have nothing to sit in
+const glyphs = [...text].map((ch) => (ch === " " ? " " : ch));
+---
+
+{/* aria-hidden: split per glyph a screen reader would read it letter by letter,
+    so the surrounding link or button carries the accessible name instead */}
+<span class="flip" aria-hidden="true">
+  {
+    glyphs.map((ch, i) => (
+      <span>
+        <span style={`--i:${i}`}>
+          <span>{ch}</span>
+          <span>{ch}</span>
+        </span>
+      </span>
+    ))
+  }
+</span>

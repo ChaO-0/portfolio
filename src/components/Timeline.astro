@@ -1,0 +1,23 @@
+---
+import { timeline } from "../data/site";
+---
+
+<section class="lattice relative z-[2] bg-ink px-[5vw] pb-[120px]">
+  <div class="mx-auto max-w-[1500px]">
+    {
+      timeline.map((row) => (
+        <div
+          data-rv
+          data-rv-x
+          class="tl flex flex-wrap items-center gap-x-[26px] gap-y-2 border-t border-paper/10 py-[26px] last:border-b max-[900px]:gap-x-[18px] max-[900px]:gap-y-2"
+        >
+          <span class="w-[120px] font-mono text-xs/none text-accent">{row.when}</span>
+          <span class="w-[280px] font-display text-[22px]/[1.2] font-medium tracking-[-.02em] max-[900px]:w-auto max-[900px]:flex-1 max-[900px]:basis-full">
+            {row.where}
+          </span>
+          <span class="flex-1 text-[14.5px]/[1.5] text-paper/50 max-[900px]:basis-full">{row.what}</span>
+        </div>
+      ))
+    }
+  </div>
+</section>

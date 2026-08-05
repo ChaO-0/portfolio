@@ -1,0 +1,77 @@
+---
+import { heroStats, site } from "../data/site";
+import Button from "./Button.astro";
+
+const headline = ["Your product,", "built by the person", "who understands it."];
+---
+
+<section
+  id="top"
+  class="sticky top-0 z-[1] box-border flex min-h-screen flex-col justify-end overflow-hidden px-[5vw] pt-[110px] pb-[5vh] max-[600px]:pt-[96px] max-[600px]:pb-[6vh]"
+>
+  <!-- static 90px lattice, sits under the WebGL scene -->
+  <div
+    class="absolute inset-0"
+    style="background-image:linear-gradient(rgba(233,237,245,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(233,237,245,.04) 1px,transparent 1px);background-size:90px 90px"
+  >
+  </div>
+
+  <canvas id="hero3d" class="absolute inset-0 size-full" aria-hidden="true"></canvas>
+
+  <div
+    id="heroFade"
+    class="absolute inset-0 opacity-55"
+    style="background:linear-gradient(180deg,rgba(10,14,24,.6) 0%,rgba(10,14,24,.12) 42%,#0a0e18 100%)"
+  >
+  </div>
+
+  <div id="heroBody" class="relative mx-auto w-full max-w-[1500px]">
+    <div class="mask">
+      <span class="label text-accent">
+        FULL-STACK ENGINEER · 5 YEARS IN BLOCKCHAIN, FINTECH, AGENCY
+      </span>
+    </div>
+
+    <h1 class="h-hero mt-[30px] max-[600px]:text-[clamp(34px,10.5vw,54px)]">
+      {
+        headline.map((line, i) => (
+          <span class="mask">
+            <span class:list={[i === 2 && "text-paper/42"]}>{line}</span>
+          </span>
+        ))
+      }
+    </h1>
+
+    <div
+      data-rv
+      class="mt-11 flex flex-wrap items-end justify-between gap-12"
+    >
+      <p
+        class="m-0 max-w-[50ch] text-[17px]/[1.6] text-paper/58 text-pretty"
+      >
+        Five years building production systems for a blockchain company, a fintech and a digital
+        agency. One engineer from schema to deploy, so nothing gets lost in a handoff and there is no
+        account manager in between.
+      </p>
+      <div class="flex gap-3">
+        <Button
+          href={site.calendly}
+          label={site.cta}
+          target="_blank"
+          class="px-[30px] py-[17px]"
+        />
+        <Button href="#work" label="See the work" variant="s" class="px-[30px] py-[17px]" />
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="relative mx-auto mt-14 flex w-full max-w-[1500px] flex-wrap items-center gap-x-11 gap-y-3 border-t border-paper/10 pt-5 font-mono text-[11.5px]/none text-paper/40"
+  >
+    <span class="text-accent">● {site.slots}</span>
+    {heroStats.map((s) => <span>{s}</span>)}
+    <span class="ml-auto"
+      >SCROLL<span class="animate-[blink_1.1s_step-end_infinite]">_</span></span
+    >
+  </div>
+</section>

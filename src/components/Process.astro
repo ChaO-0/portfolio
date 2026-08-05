@@ -1,0 +1,25 @@
+---
+import { process } from "../data/site";
+---
+
+<section id="process" class="lattice relative z-[2] bg-ink px-[5vw] py-[120px]">
+  <div class="mx-auto max-w-[1500px]">
+    <div class="mb-16 flex items-baseline justify-between">
+      <h2 class="h-sec"><span class="mask"><span>How we'd work</span></span></h2>
+      <span data-px>03 / PROCESS</span>
+    </div>
+
+    <div class="grid gap-[30px] [grid-template-columns:repeat(auto-fit,minmax(230px,1fr))]">
+      {
+        process.map((step) => (
+          <article data-rv class="ps">
+            <div class="ps-rule mb-[22px]" />
+            <div class="mb-3.5 font-mono text-[11.5px]/none text-paper/35">{step.meta}</div>
+            <h3 class="h-step mb-3">{step.title}</h3>
+            <p class="m-0 text-[14px]/[1.6] text-paper/50">{step.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,44 @@
+---
+import Flip from "./Flip.astro";
+
+interface Props {
+  href: string;
+  label: string;
+  variant?: "p" | "s";
+  class?: string;
+  target?: string;
+}
+
+const { href, label, variant = "p", class: cls, target } = Astro.props;
+
+// 14x4 mesh, each cell delayed by its column and row so the fill sweeps
+// diagonally. Computed once at module scope and shared by every button.
+const COLS = 14;
+const ROWS = 4;
+const cells = Array.from({ length: COLS * ROWS }, (_, n) =>
+  (((n % COLS) / COLS) * 0.34 + (Math.floor(n / COLS) / ROWS) * 0.1).toFixed(3)
+);
+---
+
+<a
+  href={href}
+  target={target}
+  rel={target === "_blank" ? "noopener" : undefined}
+  aria-label={label}
+  class:list={["btn", variant === "p" ? "btn-p" : "btn-s", cls]}
+>
+  <span class="btn-mesh" aria-hidden="true">
+    {cells.map((d) => <i style={`--d:${d}s`} />)}
+  </span>
+
+  <Flip text={label} />
+
+  <span class="btn-ico" aria-hidden="true">
+    <svg viewBox="0 0 13 13" fill="none">
+      <path d="M2.5 1.5L8 6.5L2.5 11.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" />
+    </svg>
+    <svg viewBox="0 0 13 13" fill="none">
+      <path d="M2.5 1.5L8 6.5L2.5 11.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" />
+    </svg>
+  </span>
+</a>
