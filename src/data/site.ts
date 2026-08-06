@@ -200,27 +200,23 @@ export const timeline = [
   },
 ];
 
+// Three cards, one decision: a site, a product, or my time by the month.
+//
+// The build plan, post-launch care and codebase audits deliberately live in the
+// prose under the grid instead of as cards. The plan is already a step in the
+// Process section, so a card for it repeats itself; care and audits are
+// follow-ons, not things anyone arrives shopping for. Six cards read as a menu
+// and made the page harder to act on.
 export const pricing = [
   {
-    label: "AUDIT",
-    price: "$399",
-    unit: "FIXED",
-    body: "Three or four days. I read the codebase, or the brief, and hand back what's broken, what it costs to fix and what I'd do first.",
+    label: "WEBSITE",
+    prefix: "from",
+    price: "$1,999",
+    body: "One to two weeks. A marketing site or company profile, built from scratch with the motion this one has. No template, no page builder.",
     includes: [
-      "Architecture & security review",
-      "Findings written up, in priority order",
-      "Credited against a build",
-    ],
-  },
-  {
-    label: "TECHNICAL PLAN",
-    price: "$999",
-    unit: "FIXED",
-    body: "One week. Data model, architecture, build plan and a fixed quote for the build. Credited back if you go ahead.",
-    includes: [
-      "Architecture & data model",
-      "Scope, risks and sequencing",
-      "Fixed quote for the build",
+      "Custom motion, WebGL if it earns it",
+      "Built to your brand, or from a sketch",
+      "Your repo, your hosting",
     ],
   },
   {
