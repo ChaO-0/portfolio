@@ -8,8 +8,8 @@ export const site = {
   location: "Bali, ID",
   // Bali is WITA (UTC+8), not Jakarta's UTC+7 — the source design says GMT+7
   timezone: "GMT+8",
-  email: "christopheryuu8@gmail.com",
-  calendly: "https://calendly.com/christopheryuu8/30min",
+  email: "chris@christopheryu.com",
+  calendly: "https://calendly.com/christopheryuu/30min",
   cta: "Book a 30-minute call",
   ctaShort: "Book a call",
   github: "https://github.com/ChaO-0",

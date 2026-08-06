@@ -8,10 +8,17 @@ import Flip from "./Flip.astro";
   class="fixed inset-x-0 top-0 z-[120] flex items-center justify-between border-b border-paper/7 bg-ink/70 px-[5vw] py-[18px] backdrop-blur-[14px]"
 >
   <a href="#top" aria-label={site.name} class="flex items-center gap-2.5">
-    <span
-      class="grid size-6 place-items-center border border-accent font-mono text-[10px]/none font-medium text-accent"
-      >{site.name.split(" ").map((word) => word[0]).join("")}</span
-    >
+    {/* The mark: a ring with an aperture cut out of the right side and an inner
+        counter, which reads as a C. fill="currentColor" so the colour comes from
+        the text-accent class rather than being baked into the path. */}
+    <svg class="block size-6 shrink-0 text-accent" viewBox="0 0 48 48" aria-hidden="true">
+      <mask id="cyMark">
+        <rect width="48" height="48" fill="#fff"></rect>
+        <circle cx="24" cy="24" r="9" fill="#000"></circle>
+        <rect x="24" y="19" width="24" height="10" fill="#000"></rect>
+      </mask>
+      <circle cx="24" cy="24" r="21" fill="currentColor" mask="url(#cyMark)"></circle>
+    </svg>
     <span class="text-[14.5px]/none font-medium">{site.name}</span>
   </a>
 
