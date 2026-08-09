@@ -227,6 +227,7 @@ export const pricing = [
     body: "Six to eight weeks, fixed scope and fixed price. A deployed product, your repos, your infrastructure.",
     includes: [
       "Weekly deploys you can use",
+      "Cancel at the week-three checkpoint",
       "Security hardening pass included",
       "30 days post-launch support",
     ],

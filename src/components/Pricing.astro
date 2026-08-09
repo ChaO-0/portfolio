@@ -80,19 +80,33 @@ import { pricing } from "../data/site";
       }
     </div>
 
+    {/* the tier past the MVP's eight-week ceiling. it outprices every card in the
+        grid, so it has to read as a price rather than as fine print. */}
+    <div
+      data-rv
+      class="mt-[26px] flex flex-wrap items-baseline gap-x-3 gap-y-1 border-l-2 border-accent pl-4"
+    >
+      <span class="font-mono text-[11.5px]/none tracking-[.12em] text-accent">
+        BIGGER THAN AN MVP
+      </span>
+      <span class="text-[14px]/[1.5] text-paper/50">
+        Twelve to fourteen weeks, from $7,999. Cancel at the week-five checkpoint.
+      </span>
+    </div>
+
     {/* names what moves the "from", so the page qualifies before a call does */}
-    <p data-rv class="m-0 mt-[26px] max-w-[70ch] text-[14px]/[1.6] text-paper/45 text-pretty">
+    <p data-rv class="m-0 mt-6 max-w-[70ch] text-[14px]/[1.6] text-paper/45 text-pretty">
       A site costs more if it has more pages, if you need to edit the content yourself, or if it
       takes payments. A product costs more if different people need different access, if money moves
-      through it, or if data has to come out of a system you already use. When all three are true at
-      once it is no longer an MVP: twelve to fourteen weeks, from $7,999. On the bigger builds a paid
+      through it, or if data has to come out of a system you already use. On the bigger builds a paid
       plan comes first, one week at $999 and credited back against the build, so you have the real
       number before committing to it.
     </p>
 
     <p data-rv class="m-0 mt-3 max-w-[70ch] text-[13.5px]/[1.6] text-paper/38">
-      Prices in USD. Builds are 40% to start and the remainder on delivery; retainers are invoiced
-      monthly in advance. Builds include 30 days of support after launch, then care from $599 a month
+      Prices in USD. Builds are 45% to start, 30% at the checkpoint and 25% on delivery. The
+      checkpoint is a deploy partway in: carry on, or cancel there and keep everything built so far
+      with nothing further owed. Retainers are invoiced monthly in advance. Builds include 30 days of support after launch, then care from $599 a month
       for up to eight hours of work if you want it. Smaller or one-off work is quoted flat after the
       scope call.
     </p>
