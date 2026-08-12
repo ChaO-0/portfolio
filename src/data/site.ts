@@ -63,7 +63,7 @@ export const services = [
     n: "03",
     title: "Backend & APIs",
     body: "Data modelling, services, queues, third-party integration. Systems that survive their second year and the load you didn't plan for. Contract integration and indexers too, shipped with real money on the line.",
-    tags: ["POSTGRES", "NODE · GO"],
+    tags: ["POSTGRES", "NODE · NESTJS"],
   },
   {
     n: "04",
@@ -111,8 +111,7 @@ export const marquee = [
   "NODE",
   "POSTGRES",
   "NEXT.JS",
-  "GO",
-  "SOLIDITY",
+  "NESTJS",
   "REDIS",
   "AWS",
   "DOCKER",
