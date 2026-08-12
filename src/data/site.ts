@@ -150,7 +150,7 @@ export const process = [
 ];
 
 export const bio = [
-  "I'm Christopher. I build web products end to end: the database, the API, the dashboard, the deploy.",
+  "I'm Christopher. I build SaaS, dashboards and internal tools in TypeScript, end to end: the database, the API, the dashboard, the deploy.",
   "Five years across three very different rooms: a year at a blockchain company where mistakes are expensive and public, three at a fintech where the ledger has to balance every time, and a year at a digital agency where the deadline is the deadline. Different constraints, same job: make the thing work.",
   "Before that I played CTF competitively. Strange hobby, but it turned out to be useful: I spent years looking for the ways software breaks, so I write it differently. Security review happens while the code is written, not in an audit six months later.",
 ];
@@ -169,11 +169,19 @@ export const statement = {
   },
 };
 
+// One language, named once and singular. Listing TypeScript beside Go, Python
+// and Solidity read as undecided and made five years look like one: a buyer
+// cannot tell what someone is good at from four equal-weight logos. Go, Python
+// and Solidity are not gone from the CV, they are gone from the pitch, and the
+// chain work keeps its credential inside the backend service card.
 export const stack = [
-  { label: "LANGUAGES", items: ["TypeScript", "Go", "Python", "Solidity"] },
-  { label: "BACKEND", items: ["Node · NestJS", "Express", "REST · GraphQL", "Queues · Workers"] },
-  { label: "FRONTEND", items: ["React · Next.js", "Tailwind", "GSAP", "three.js"] },
-  { label: "DATA", items: ["PostgreSQL", "Redis", "Prisma", "ClickHouse"] },
+  { label: "LANGUAGE", items: ["TypeScript", "Strict, end to end", "Shared types", "Node · browser"] },
+  {
+    label: "BACKEND",
+    items: ["NestJS · Node", "REST · GraphQL", "Queues · workers", "Webhooks · idempotency"],
+  },
+  { label: "FRONTEND", items: ["Next.js · React", "Tailwind", "GSAP", "three.js"] },
+  { label: "DATA", items: ["PostgreSQL", "Prisma", "Redis", "Ledgers · reconciliation"] },
   { label: "INFRA", items: ["AWS · GCP", "Docker", "CI/CD", "Observability"] },
   {
     label: "SECURITY",
