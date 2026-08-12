@@ -40,28 +40,34 @@ export const preloadSteps = [
   "ready",
 ];
 
+// One card per thing the pricing grid sells, in the same order and using the same
+// words. Two vocabularies on one page meant a reader could not tell that
+// "contract capacity" and the EMBEDDED tier were the same product, and that the
+// sites they were being quoted for appeared nowhere in what he says he does.
+// Web3 stays a credential inside the backend card rather than a headline service
+// with no price attached to it.
 export const services = [
   {
     n: "01",
-    title: "MVP builds",
-    body: "Idea to a deployed product your users can sign into. Auth, payments, dashboards, admin and infrastructure: the unglamorous parts that decide whether it works.",
-    tags: ["6–8 WEEKS", "FIXED SCOPE"],
+    title: "Sites",
+    body: "A landing page or a full site, hand-built rather than assembled from a template. Motion where it earns its place, and content you can edit yourself on the larger ones.",
+    tags: ["1–2 WEEKS", "FIXED SCOPE"],
   },
   {
     n: "02",
-    title: "Backend & APIs",
-    body: "Data modelling, services, queues, third-party integration. Systems that survive their second year and the load you didn't plan for.",
-    tags: ["POSTGRES", "NODE · GO"],
+    title: "Product builds",
+    body: "Idea to a deployed product your users can sign into. Auth, payments, dashboards, admin and infrastructure: the unglamorous parts that decide whether it works.",
+    tags: ["6–14 WEEKS", "FIXED SCOPE"],
   },
   {
     n: "03",
-    title: "Web3 integration",
-    body: "Contract integration, indexers, wallet flows and custody-adjacent plumbing, from someone who has shipped them with real money on the line.",
-    tags: ["EVM", "INDEXERS"],
+    title: "Backend & APIs",
+    body: "Data modelling, services, queues, third-party integration. Systems that survive their second year and the load you didn't plan for. Contract integration and indexers too, shipped with real money on the line.",
+    tags: ["POSTGRES", "NODE · GO"],
   },
   {
     n: "04",
-    title: "Contract capacity",
+    title: "Embedded capacity",
     body: "Embedded with your team or your agency's, by the month. Work off your board or a written brief, and get shipped features back. White-label if you need it.",
     tags: ["MONTHLY", "WHITE-LABEL"],
   },
@@ -200,43 +206,129 @@ export const timeline = [
   },
 ];
 
-// Three cards, one decision: a site, a product, or my time by the month.
+// Four sizes of the same thing: a build. Every tier answers the same list of
+// rows, so the grid is a comparison rather than four unrelated bullet lists,
+// and the reader can see what the cheap one does not get.
 //
-// The build plan, post-launch care and codebase audits deliberately live in the
-// prose under the grid instead of as cards. The plan is already a step in the
-// Process section, so a card for it repeats itself; care and audits are
-// follow-ons, not things anyone arrives shopping for. Six cards read as a menu
-// and made the page harder to act on.
+// The landing page and the website sit next to each other at very different
+// prices, so the row that separates them — editing your own content — has to be
+// in the grid. In the prose it was invisible, and two adjacent cards that score
+// the same read as the same product at two prices. Both names describe what the
+// buyer gets, never how it is built: nobody shops for "static".
+//
+// Embedded capacity lives below the grid instead of in it. It is a different
+// trade, not a smaller build: rented time with no fixed scope. Put in a column
+// it scores ✗ on fixed price and scope-in-advance, which makes the steadiest
+// revenue on the page look like the worst option.
+//
+// The build plan, post-launch care and codebase audits stay in the prose under
+// the grid. The plan is already a step in the Process section, and care and
+// audits are follow-ons, not things anyone arrives shopping for.
+
+/** One row per promise, in the order they appear on every card. */
+export const includedRows = [
+  "Fixed price, agreed before we start",
+  "Your repos, your hosting",
+  "Custom motion, WebGL if it earns it",
+  "Content you can edit yourself",
+  "Weekly deploys you can use",
+  "A checkpoint you can cancel at",
+  "Security hardening pass",
+  "30 days post-launch support",
+  "Several kinds of user, with permissions",
+  "Payments and outside integrations",
+];
+
+/** true: included as written. false: not. string: included, worded for this tier. */
+export type Included = boolean | string;
+
+// Each pair is one thing in two sizes, and nobody compares across the pairs: a
+// founder needing a product never reads the site cards, and a brand needing a
+// site never reads the product ones. Grouping them turns four choices into two
+// easy ones — pick the pair, then pick the size — instead of a reader scanning
+// four cards trying to work out which one describes them.
+export const pricingGroups = [
+  { key: "SITES", note: "No login, no database. Pages people read." },
+  { key: "PRODUCTS", note: "Login, data, and users doing work inside it." },
+];
+
 export const pricing = [
   {
+    group: "SITES",
+    label: "LANDING PAGE",
+    prefix: "from",
+    price: "$999",
+    span: "One week",
+    body: "One page, hand-built, with the content set at launch. For a product launch, an event, or a first presence.",
+    included: [
+      true,
+      true,
+      "Motion, no WebGL",
+      false,
+      false,
+      false,
+      false,
+      true,
+      false,
+      false,
+    ] as Included[],
+  },
+  {
+    group: "SITES",
     label: "WEBSITE",
     prefix: "from",
-    price: "$1,999",
-    body: "One to two weeks. A marketing site or company profile, built from scratch with the motion this one has. No template, no page builder.",
-    includes: [
-      "Custom motion, WebGL if it earns it",
-      "Built to your brand, or from a sketch",
-      "Your repo, your hosting",
-    ],
+    price: "$2,499",
+    span: "One to two weeks",
+    body: "Up to six pages, and you edit the content yourself. For brands who need a site that looks built rather than assembled.",
+    included: [true, true, true, true, false, false, false, true, false, false] as Included[],
   },
   {
+    group: "PRODUCTS",
     label: "MVP BUILD",
     prefix: "from",
-    price: "$3,999",
+    price: "$7,999",
+    span: "Six to eight weeks",
     featured: true,
-    body: "Six to eight weeks, fixed scope and fixed price. A deployed product, your repos, your infrastructure.",
-    includes: [
-      "Weekly deploys you can use",
+    body: "For founders finding out whether the thing works, on a date they can plan around.",
+    included: [
+      true,
+      true,
+      true,
+      true,
+      true,
       "Cancel at the week-three checkpoint",
-      "Security hardening pass included",
-      "30 days post-launch support",
-    ],
+      true,
+      true,
+      false,
+      false,
+    ] as Included[],
   },
   {
-    label: "EMBEDDED",
-    price: "$2,499",
-    unit: "/ MONTH",
-    body: "Dedicated capacity in your team or your agency's. Minimum one month, two weeks' notice to stop.",
-    includes: ["Your board, your standups", "White-label for agencies", "EU & UK morning overlap"],
+    group: "PRODUCTS",
+    label: "PRODUCTION BUILD",
+    prefix: "from",
+    price: "$13,999",
+    span: "Twelve to fourteen weeks",
+    body: "The finished version that carries real users and real money: a SaaS, an internal dashboard, a tool your team runs on.",
+    included: [
+      true,
+      true,
+      true,
+      true,
+      true,
+      "Cancel at the week-five checkpoint",
+      true,
+      true,
+      true,
+      true,
+    ] as Included[],
   },
 ];
+
+export const embedded = {
+  label: "EMBEDDED",
+  price: "$3,499",
+  unit: "/ MONTH",
+  body: "Dedicated capacity in your team or your agency's, rather than a scoped build. Minimum one month, two weeks' notice to stop.",
+  includes: ["Your board, your standups", "White-label for agencies", "EU & UK morning overlap"],
+};

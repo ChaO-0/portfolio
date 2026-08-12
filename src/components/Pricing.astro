@@ -1,5 +1,6 @@
 ---
-import { pricing } from "../data/site";
+import Button from "./Button.astro";
+import { embedded, includedRows, pricing, pricingGroups, site } from "../data/site";
 ---
 
 <section
@@ -13,8 +14,9 @@ import { pricing } from "../data/site";
     </div>
 
     <p data-rv class="m-0 mb-7 max-w-[64ch] text-[16px]/[1.6] text-paper/50 text-pretty">
-      Fixed prices, not hourly. You know the number before the work starts, and it doesn't move
-      unless the scope does. For comparison, agencies quote a build of this scope at $15,000–60,000.
+      Fixed prices, not hourly. The “from” is where a tier starts: the scope call turns it into one
+      number, in writing, before any work begins, and that number doesn't move unless the scope
+      does. For comparison, agencies quote the product builds below at $15,000–60,000.
     </p>
 
     {/* the discount is named and dated, so raising it later is a published schedule */}
@@ -30,9 +32,24 @@ import { pricing } from "../data/site";
       </span>
     </div>
 
-    <div class="hair-grid [grid-template-columns:repeat(auto-fit,minmax(280px,1fr))]">
+    {/* Two grids rather than one row of four, so a label always sits over its own
+        pair however the columns wrap. One row of four with headers above it comes
+        apart the moment auto-fit drops to three columns. */}
+    <div class="grid gap-x-[26px] gap-y-12 md:grid-cols-2">
       {
-        pricing.map((tier) => (
+        pricingGroups.map((group) => (
+          <div>
+            <div data-rv class="mb-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <span class="font-mono text-[11.5px]/none tracking-[.12em] text-accent">
+                {group.key}
+              </span>
+              <span class="text-[13.5px]/[1.5] text-paper/42">{group.note}</span>
+            </div>
+
+            <div class="hair-grid [grid-template-columns:repeat(auto-fit,minmax(260px,1fr))]">
+              {pricing
+                .filter((tier) => tier.group === group.key)
+                .map((tier) => (
           <article
             data-rv
             data-rv-fade
@@ -68,45 +85,104 @@ import { pricing } from "../data/site";
               )}
             </div>
 
-            <p class="m-0 mb-6 text-[14.5px]/[1.6] text-paper/52">{tier.body}</p>
-
-            <div class="mt-auto flex flex-col gap-2.5 text-[13.5px]/[1.4] text-paper/62">
-              {tier.includes.map((line) => (
-                <span>{line}</span>
-              ))}
+            <div class="mb-5 font-mono text-[11px]/none tracking-[.1em] text-paper/38">
+              {tier.span.toUpperCase()}
             </div>
-          </article>
+
+            <p class="m-0 mb-7 text-[14.5px]/[1.6] text-paper/52">{tier.body}</p>
+
+            <Button
+              href={site.calendly}
+              label={site.ctaShort}
+              variant={tier.featured ? "p" : "s"}
+              target="_blank"
+              class="mb-8 self-start px-6 py-3.5"
+            />
+
+            {/* Same rows, same order, on every card. The ✗ marks are the point:
+                without them a reader cannot tell what the cheap tier gives up. */}
+            <div class="mt-auto border-t border-paper/8 pt-6">
+              <div class="mb-4 font-mono text-[10.5px]/none tracking-[.14em] text-paper/38">
+                WHAT'S INCLUDED
+              </div>
+              <ul class="m-0 flex list-none flex-col gap-2.5 p-0">
+                {includedRows.map((row, i) => {
+                  const value = tier.included[i];
+                  const on = value !== false;
+                  return (
+                    <li class="flex items-start gap-2.5 text-[13.5px]/[1.45]">
+                      <span
+                        aria-hidden="true"
+                        class:list={[
+                          "mt-px flex size-[15px] flex-none items-center justify-center rounded-full font-mono text-[9px]/none",
+                          on ? "bg-accent/15 text-accent" : "bg-paper/8 text-paper/30",
+                        ]}
+                      >
+                        {on ? "✓" : "✕"}
+                      </span>
+                      {/* a string reworks the row for this tier, the way the
+                          page-count rows differ between tiers on a pricing table */}
+                      <span class:list={[on ? "text-paper/62" : "text-paper/28 line-through"]}>
+                        {typeof value === "string" ? value : row}
+                      </span>
+                      <span class="sr-only">{on ? "included" : "not included"}</span>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+                  </article>
+                ))}
+            </div>
+          </div>
         ))
       }
     </div>
 
-    {/* the tier past the MVP's eight-week ceiling. it outprices every card in the
-        grid, so it has to read as a price rather than as fine print. */}
+    {/* Not a fourth column: rented time with no fixed scope would score ✗ on the
+        rows the grid is built around, which misreads a different trade as a
+        worse deal. */}
     <div
       data-rv
-      class="mt-[26px] flex flex-wrap items-baseline gap-x-3 gap-y-1 border-l-2 border-accent pl-4"
+      class="spot mt-[26px] flex flex-wrap items-start justify-between gap-x-10 gap-y-6 border border-paper/10 px-8 py-7"
     >
-      <span class="font-mono text-[11.5px]/none tracking-[.12em] text-accent">
-        BIGGER THAN AN MVP
-      </span>
-      <span class="text-[14px]/[1.5] text-paper/50">
-        Twelve to fourteen weeks, from $7,999. Cancel at the week-five checkpoint.
-      </span>
+      <div>
+        <div class="mb-4 font-mono text-[11.5px]/none text-paper/40">{embedded.label}</div>
+        <div class="mb-4 flex items-baseline gap-2">
+          <span class="stat" data-count>{embedded.price}</span>
+          <span class="font-mono text-[13px]/none text-paper/40">{embedded.unit}</span>
+        </div>
+        <p class="m-0 max-w-[52ch] text-[14.5px]/[1.6] text-paper/52">{embedded.body}</p>
+      </div>
+      <div class="flex flex-col gap-2.5 pt-1 text-[13.5px]/[1.4] text-paper/62">
+        {embedded.includes.map((line) => (
+          <span>{line}</span>
+        ))}
+      </div>
+      <Button
+        href={site.calendly}
+        label={site.ctaShort}
+        variant="s"
+        target="_blank"
+        class="mt-1 px-6 py-3.5"
+      />
     </div>
 
     {/* names what moves the "from", so the page qualifies before a call does */}
     <p data-rv class="m-0 mt-6 max-w-[70ch] text-[14px]/[1.6] text-paper/45 text-pretty">
-      A site costs more if it has more pages, if you need to edit the content yourself, or if it
-      takes payments. A product costs more if different people need different access, if money moves
+      Past six pages a site is quoted after the scope call, and a site that takes payments or needs
+      accounts is a product build rather than a site. A product costs more if
+      different people need different access, if money moves
       through it, or if data has to come out of a system you already use. On the bigger builds a paid
       plan comes first, one week at $999 and credited back against the build, so you have the real
       number before committing to it.
     </p>
 
     <p data-rv class="m-0 mt-3 max-w-[70ch] text-[13.5px]/[1.6] text-paper/38">
-      Prices in USD. Builds are 45% to start, 30% at the checkpoint and 25% on delivery. The
-      checkpoint is a deploy partway in: carry on, or cancel there and keep everything built so far
-      with nothing further owed. Retainers are invoiced monthly in advance. Builds include 30 days of support after launch, then care from $599 a month
+      Prices in USD. Builds with a checkpoint are 45% to start, 30% at the checkpoint and 25% on
+      delivery; the sites are 45% to start and the rest on delivery, since there is no halfway to
+      stop at. The checkpoint is a deploy partway in: carry on, or cancel there and keep
+      everything built so far with nothing further owed. Retainers are invoiced monthly in advance. Every tier includes 30 days of support after launch, then care from $599 a month
       for up to eight hours of work if you want it. Smaller or one-off work is quoted flat after the
       scope call.
     </p>
