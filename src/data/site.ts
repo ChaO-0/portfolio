@@ -15,6 +15,7 @@ export const site = {
   github: "https://github.com/ChaO-0",
   githubHandle: "github.com/ChaO-0",
   linkedin: "https://www.linkedin.com/in/christopherycc",
+  x: "https://x.com/christopheryuu_",
   slots: "2 SLOTS, Q4 2026",
   availability: "TAKING WORK FOR Q4 2026 · 2 SLOTS",
 };

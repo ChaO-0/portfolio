@@ -67,7 +67,7 @@ const person = {
     addressLocality: site.location.split(",")[0],
     addressCountry: "ID",
   },
-  sameAs: [site.github, site.linkedin],
+  sameAs: [site.github, site.linkedin, site.x],
   knowsAbout: [
     "TypeScript",
     "Next.js",
@@ -107,7 +107,10 @@ const person = {
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={`${site.name} · ${site.role}`} />
 
+    {/* attributes the card to his account when the link is pasted on X, which is
+        where most of these links get shared */}
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:creator" content="@christopheryuu_" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
