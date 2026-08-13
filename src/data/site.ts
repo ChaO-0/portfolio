@@ -78,8 +78,15 @@ export const projects = [
     n: "01",
     meta: "PERSONAL FINANCE · 2025",
     title: "Monark",
-    body: "A money management app. Multi-account budgets, categorised transactions and a ledger that reconciles. The accounting model is the hard part, not the charts.",
-    tags: ["NEXT.JS", "POSTGRES", "DOUBLE-ENTRY LEDGER"],
+    // Described strictly to what the schema supports. It has categorised
+    // transactions, budgets, goals, recurring entries and AI insights; it has no
+    // financial account model, no debit/credit entries and nothing that
+    // reconciles, so the old "multi-account budgets", "ledger that reconciles"
+    // and DOUBLE-ENTRY LEDGER tag were claims the code could not back. Totals
+    // really are derived from the transactions with sum aggregates and never
+    // cached, which is the true version of the point the old copy was reaching for.
+    body: "A money management app. Categorised transactions, budgets, savings goals and recurring entries, with an AI summary over the top. Every total is derived from the transactions rather than stored alongside them, so there is no second copy to fall out of step.",
+    tags: ["BUDGETS & GOALS", "RECURRING", "AI SUMMARIES"],
     host: "monark-seven.vercel.app",
     href: "https://monark-seven.vercel.app",
     shot: monark,
