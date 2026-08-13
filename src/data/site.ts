@@ -4,7 +4,7 @@ import stencil from "../assets/work/stencil.png";
 
 export const site = {
   name: "Christopher Yu",
-  role: "Full-stack engineer",
+  role: "Full-stack TypeScript engineer",
   location: "Bali, ID",
   // Bali is WITA (UTC+8), not Jakarta's UTC+7 — the source design says GMT+7
   timezone: "GMT+8",
