@@ -1,0 +1,14 @@
+---
+import Mark from "./Mark.astro";
+
+// Rendered covering the viewport rather than built in JS, so there is no frame
+// where the incoming page is visible before the panel arrives. transition.ts
+// slides it away on load and reuses the same element to cover on the way out.
+---
+
+<div id="tx" data-show>
+  <Mark id="tx" size={34} />
+</div>
+
+{/* Nothing slides it away without JS, so without JS it was never there. */}
+<noscript><style>#tx { display: none; }</style></noscript>

@@ -3,12 +3,12 @@
        (r 8 vs 9), the aperture taller (12 vs 10) and the ring fills the whole
        viewBox (r 24 vs 21), so the C still reads at 16px where the thinner
        original closes up into a blob.
-       Accent cyan rather than ink or paper, because a favicon has to survive
-       both a light and a dark browser tab strip. -->
+       Mint rather than ink or paper, because a favicon has to survive both a
+       light and a dark browser tab strip. -->
   <mask id="c">
     <rect width="48" height="48" fill="#fff" />
     <circle cx="24" cy="24" r="8" fill="#000" />
     <rect x="24" y="18" width="24" height="12" fill="#000" />
   </mask>
-  <circle cx="24" cy="24" r="24" fill="#36caf1" mask="url(#c)" />
+  <circle cx="24" cy="24" r="24" fill="#57C8A5" mask="url(#c)" />
 </svg>

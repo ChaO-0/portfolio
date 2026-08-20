@@ -1,0 +1,150 @@
+---
+import { Image } from "astro:assets";
+import { projects, site } from "../../data/site";
+import Cta from "../../components/Cta.astro";
+import DataRows from "../../components/DataRows.astro";
+import Flow from "../../components/Flow.astro";
+import Manifest from "../../components/Manifest.astro";
+import Doc from "../../layouts/Doc.astro";
+
+const monark = projects[0];
+
+const toc = [
+  { id: "problem", label: "01  THE PROBLEM" },
+  { id: "architecture", label: "02  ARCHITECTURE" },
+  { id: "data", label: "03  DATA MODEL" },
+  { id: "stack", label: "04  STACK" },
+];
+
+const meta = [
+  { k: "PRODUCT", v: "Monark" },
+  { k: "ROLE", v: "Everything" },
+  { k: "STACK", v: "Next.js · TS" },
+  { k: "DATA", v: "Postgres · Prisma" },
+  { k: "HOST", v: "Vercel" },
+];
+
+// Left to right: where a write goes and what it crosses on the way.
+const flow = [
+  { name: "CLIENT", note: "next.js", lit: true },
+  { name: "SERVER ACTIONS", note: "user-scoped" },
+  { name: "PRISMA", note: "typed" },
+  { name: "POSTGRES", note: "source of truth", lit: true },
+];
+
+const tables = [
+  [
+    "transactions",
+    "Amounts in minor units as bigint, with an income or expense type rather than a sign. Category is a foreign key, never a string.",
+  ],
+  [
+    "budgets",
+    "Unique on user, category and month, so two budgets cannot fight over the same month and the database is what says so.",
+  ],
+  [
+    "recurring_transactions",
+    "A template plus the last month it was advanced past, so confirming or skipping a month is idempotent and a missed run cannot double-post.",
+  ],
+  [
+    "goals",
+    "Target plus optional deadline. Progress is summed from contributions, never stored, because stored progress goes stale silently.",
+  ],
+];
+
+const manifest = [
+  { label: "CLIENT", items: "Next.js · React · TypeScript · Tailwind" },
+  { label: "SERVER", items: "Node · Server Actions · NextAuth · bcrypt" },
+  { label: "DATA", items: "Postgres · Prisma · pg" },
+  { label: "SERVICES", items: "Vercel · Resend · Gemini" },
+];
+---
+
+<Doc
+  title={`Monark case study · ${site.name}`}
+  description="How Monark was built: why the dashboard opens with a sentence instead of a chart, why every total is derived rather than stored, and why money is a branded integer."
+  ogType="article"
+  label="CASE STUDY 01 / MONARK"
+  back={{ href: "/work", label: "WORK INDEX" }}
+  meta={meta}
+  tocTitle="Contents"
+  toc={toc}
+>
+  <Fragment slot="headline">
+    <div class="eyebrow mb-[26px]">OWN PRODUCT &nbsp;·&nbsp; IN PRODUCTION &nbsp;·&nbsp; 2026</div>
+    <h1
+      class="max-w-[820px] text-[clamp(44px,6vw,84px)] leading-[0.96] font-medium tracking-[-0.04em]"
+    >
+      <span class="line"><span data-line class="block">A finance app that</span></span>
+      <span class="line"
+        ><span data-line class="block"><span class="text-mint">forecasts</span> instead of</span
+        ></span
+      >
+      <span class="line"><span data-line class="block">reporting.</span></span>
+    </h1>
+  </Fragment>
+
+  <div data-mask slot="banner" class="overflow-hidden border-b border-line bg-panel">
+    <Image
+      src={monark.shot}
+      alt="Monark dashboard"
+      widths={[900, 1400, 1900]}
+      sizes="100vw"
+      class="block h-[520px] w-full object-cover object-left-top"
+    />
+  </div>
+
+  <section id="problem" class="scroll-mt-[90px]">
+    <div class="eyebrow mb-5">01&nbsp;&nbsp;THE PROBLEM</div>
+    <h2 data-reveal class="text-[34px] leading-[1.12] font-medium tracking-[-0.025em]">
+      Budget apps report the past. Nobody needs a report.
+    </h2>
+    <p data-reveal class="mt-[22px] text-lg leading-[1.65] text-mute">
+      Every personal finance tool I tried answered the wrong question. They tell you what you spent,
+      in a chart, after the fact. The question that actually matters on day four of the month is
+      whether you are on track to end it badly.
+    </p>
+    <p data-reveal class="mt-[18px] text-lg leading-[1.65] text-mute">
+      So Monark's dashboard does not open with a chart. It opens with a sentence: your net position
+      and where the month is pacing to. The visualisation is secondary to the statement.
+    </p>
+    <div data-reveal class="mt-7 border-l-2 border-mint bg-mint/5 py-3.5 pl-5">
+      <div class="text-[17px] leading-[1.6] text-paper">
+        The design constraint I set: if the headline needs a legend to be understood, it is wrong.
+      </div>
+    </div>
+  </section>
+
+  <section id="architecture" class="mt-[70px] scroll-mt-[90px]">
+    <div class="eyebrow mb-5">02&nbsp;&nbsp;ARCHITECTURE</div>
+    <h2 data-reveal class="text-[34px] leading-[1.12] font-medium tracking-[-0.025em]">
+      Deliberately small.
+    </h2>
+    <p data-reveal class="mt-[22px] text-lg leading-[1.65] text-mute">
+      One Next.js app, one Postgres database, Prisma between them. No microservices, no message bus,
+      no event sourcing. A single-user finance app does not need distributed anything, and every
+      extra moving part is something that can be down at 2am for no revenue.
+    </p>
+
+    <Flow fig="FIG. 02.1 / SYSTEM" nodes={flow} notes={["EVERY TOTAL IS DERIVED ON READ, NOTHING IS CACHED OR ROLLED UP","NO QUEUE, NO CRON, NO SECOND COPY OF A NUMBER"]} />
+  </section>
+
+  <section id="data" class="mt-[70px] scroll-mt-[90px]">
+    <div class="eyebrow mb-5">03&nbsp;&nbsp;DATA MODEL</div>
+    <h2 data-reveal class="text-[34px] leading-[1.12] font-medium tracking-[-0.025em]">
+      Constraints in the schema, not in the app.
+    </h2>
+    <p data-reveal class="mt-[22px] text-lg leading-[1.65] text-mute">
+      Anything the database can guarantee, the database guarantees. Application code is where rules
+      go to be forgotten.
+    </p>
+
+    <DataRows rows={tables} />
+  </section>
+
+  <section id="stack" class="mt-[70px] scroll-mt-[90px]">
+    <div class="eyebrow mb-5">04&nbsp;&nbsp;STACK MANIFEST</div>
+    <Manifest rows={manifest} />
+  </section>
+
+  <Cta heading="Want this level of thinking on your product?" layout="inline" />
+</Doc>

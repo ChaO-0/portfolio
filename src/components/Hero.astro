@@ -1,78 +1,95 @@
 ---
-import { heroStats, site } from "../data/site";
-import Button from "./Button.astro";
-
-const headline = ["Your product,", "built by the person", "who understands it."];
+import { sectionNo } from "../data/site";
+// The right panel is FIG.01: the same spine every project on this site is built
+// on, drawn once so the claim in the Systems section is visible before it's made.
 ---
 
 <section
-  id="top"
-  class="sticky top-0 z-[1] box-border flex min-h-screen flex-col justify-end overflow-hidden px-[5vw] pt-[110px] pb-[5vh] max-[600px]:pt-[96px] max-[600px]:pb-[6vh]"
+  id="hero"
+  class="grid min-h-screen grid-cols-1 border-b border-line lg:grid-cols-[1fr_380px]"
 >
-  <!-- static 90px lattice, sits under the WebGL scene -->
   <div
-    class="absolute inset-0"
-    style="background-image:linear-gradient(rgba(233,237,245,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(233,237,245,.04) 1px,transparent 1px);background-size:90px 90px"
+    class="flex flex-col justify-center px-5 pt-[124px] pb-16 sm:px-8 lg:pt-[150px] lg:pr-11 lg:pl-10"
   >
-  </div>
-
-  <canvas id="hero3d" class="absolute inset-0 size-full" aria-hidden="true"></canvas>
-
-  <div
-    id="heroFade"
-    class="absolute inset-0 opacity-55"
-    style="background:linear-gradient(180deg,rgba(10,14,24,.6) 0%,rgba(10,14,24,.12) 42%,#0a0e18 100%)"
-  >
-  </div>
-
-  <div id="heroBody" class="relative mx-auto w-full max-w-[1500px]">
-    <div class="mask">
-      <span class="label text-accent">
-        FULL-STACK TYPESCRIPT · 5 YEARS IN PRODUCTION · 3 IN FINTECH
-      </span>
+    <div data-hero-fade class="eyebrow mb-[34px] opacity-0">
+      § {sectionNo("hero")}&nbsp;&nbsp;THE WORKSHOP IS OPEN &nbsp;·&nbsp; BALI, UTC+8
     </div>
 
-    <h1 class="h-hero mt-[30px]">
-      {
-        headline.map((line, i) => (
-          <span class="mask">
-            <span class:list={[i === 2 && "text-paper/42"]}>{line}</span>
-          </span>
-        ))
-      }
+    <h1
+      class="max-w-[860px] text-[clamp(46px,6.4vw,88px)] leading-[0.98] font-medium tracking-[-0.04em]"
+    >
+      <span class="line"><span data-line class="block">I build products</span></span>
+      <span class="line"
+        ><span data-line class="block">from <span class="text-mute">idea</span> to</span></span
+      >
+      <span class="line"
+        ><span data-line class="block"><span class="text-mint">production</span>.</span></span
+      >
     </h1>
 
-    <div
-      data-rv
-      class="mt-11 flex flex-wrap items-end justify-between gap-12"
+    <p
+      data-hero-fade
+      class="mt-9 max-w-[540px] text-[18.5px] leading-[1.58] text-mute opacity-0 text-pretty"
     >
-      <p
-        class="m-0 max-w-[50ch] text-[17px]/[1.6] text-paper/58 text-pretty"
-      >
-        Five years building production systems, three of them where the ledger had to balance. I
-        build SaaS, dashboards and internal tools in TypeScript, and I'm the one you want when money
-        runs through them. One engineer from schema to deploy, so nothing gets lost in a handoff and
-        there is no account manager in between.
-      </p>
-      <div class="flex gap-3">
-        <Button
-          href={site.calendly}
-          label={site.cta}
-          target="_blank"
-          class="px-[30px] py-[17px]"
-        />
-        <Button href="#work" label="See the work" variant="s" class="px-[30px] py-[17px]" />
-      </div>
+      A product engineer working with founders and teams who want one person to own the whole
+      thing. Interface, API, schema, architecture, deploys. You work directly with the
+      person writing the code, not an account manager, and you get senior engineering without the
+      overhead of an agency.
+    </p>
+
+    <div data-hero-fade class="mt-10 flex flex-wrap gap-2.5 opacity-0">
+      <a href="#contact" class="btn">START A PROJECT →</a>
+      <a href="#work" class="btn-ghost">SEE THE WORK →</a>
     </div>
   </div>
 
   <div
-    class="relative mx-auto mt-14 flex w-full max-w-[1500px] flex-wrap items-center gap-x-11 gap-y-3 border-t border-paper/10 pt-5 font-mono text-[11.5px]/none text-paper/40"
+    data-hero-panel
+    class="flex flex-col border-t border-line bg-gradient-to-b from-mint/[0.07] to-mint/[0.015] px-[22px] pt-16 pb-[26px] opacity-0 lg:border-t-0 lg:border-l lg:pt-24"
   >
-    <span class="text-accent">● {site.slots}</span>
-    {heroStats.map((s) => <span>{s}</span>)}
-    <span class="ml-auto"
-      >SCROLL<span class="animate-[blink_1.1s_step-end_infinite]">_</span></span
-    >
+    <div class="mono mb-[18px] flex justify-between text-[9.5px] tracking-[0.12em] text-mint">
+      <span>FIG.01 / SHAPE OF EVERY PROJECT</span><span>● LIVE</span>
+    </div>
+
+    <div class="mono flex flex-col text-[10px] tracking-[0.07em]">
+      <div class="flex justify-between border border-mint bg-mint/[0.12] px-3.5 py-3 text-mint">
+        <span>CLIENT</span><span>next.js</span>
+      </div>
+
+      <div class="relative ml-[22px] h-8 w-px overflow-hidden bg-mint/30">
+        <span class="absolute top-0 left-0 h-4 w-px animate-[pkt_1.8s_linear_infinite] bg-mint"
+        ></span>
+      </div>
+
+      <div class="flex justify-between border border-mint/40 px-3.5 py-3">
+        <span>API</span><span class="text-mint">node</span>
+      </div>
+
+      <div class="relative ml-[22px] h-8 w-px overflow-hidden bg-mint/30">
+        <span
+          class="absolute top-0 left-0 h-4 w-px animate-[pkt_1.8s_linear_0.4s_infinite] bg-mint"
+        ></span>
+      </div>
+
+      <div class="flex gap-2">
+        <div class="flex-1 border border-mint/40 px-3.5 py-3">POSTGRES</div>
+        <div class="flex-1 border border-line px-3.5 py-3 text-mute">REDIS</div>
+      </div>
+
+      <div class="relative ml-[22px] h-8 w-px overflow-hidden bg-mint/30">
+        <span
+          class="absolute top-0 left-0 h-4 w-px animate-[pkt_1.8s_linear_0.8s_infinite] bg-mint"
+        ></span>
+      </div>
+
+      <div class="flex justify-between border border-mint/40 px-3.5 py-3">
+        <span>WORKERS</span><span class="text-mint">queue</span>
+      </div>
+    </div>
+
+    <div class="mono mt-auto border-t border-mint/25 pt-[22px] text-[9.5px] leading-[1.95] text-mint">
+      <div>SPINE FOLLOWS THE SCROLL</div>
+      <div class="text-mute">CURSOR SHIFTS THE VIEW</div>
+    </div>
   </div>
 </section>

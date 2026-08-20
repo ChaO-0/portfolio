@@ -1,0 +1,47 @@
+---
+// The FIG.02.1 system diagram on every case study: boxes left to right with a
+// packet crossing each link, and two lines of caption underneath.
+interface Props {
+  fig: string;
+  nodes: { name: string; note: string; lit?: boolean }[];
+  /** Caption lines. The first is mute, the rest dim. */
+  notes: string[];
+}
+
+const { fig, nodes, notes } = Astro.props;
+---
+
+<div data-reveal class="mt-8 border border-line bg-panel px-6 py-[26px]">
+  <div class="mono mb-[22px] text-[9.5px] tracking-[0.12em] text-dim">{fig}</div>
+
+  <div class="mono flex flex-wrap items-center text-[10px] tracking-[0.07em]">
+    {
+      nodes.map((node, i) => (
+        <>
+          {i > 0 && (
+            <div class="relative h-px w-[52px] overflow-hidden bg-mint/30">
+              <span
+                class="absolute top-0 left-0 h-px w-3.5 bg-mint"
+                style={`animation:pktx 1.9s linear ${(i - 1) * 0.5}s infinite`}
+              />
+            </div>
+          )}
+          <div
+            class:list={[
+              "px-3.5 py-3",
+              node.lit ? "border border-mint bg-mint/10 text-mint" : "border border-mint/40",
+            ]}
+          >
+            {node.name}
+            <br />
+            <span class="text-mute">{node.note}</span>
+          </div>
+        </>
+      ))
+    }
+  </div>
+
+  <div class="mono mt-5 border-t border-line pt-4 text-[10px] leading-[1.9] text-mute">
+    {notes.map((n, i) => <div class:list={[i > 0 && "text-dim"]}>{n}</div>)}
+  </div>
+</div>

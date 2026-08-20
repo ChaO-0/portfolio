@@ -1,0 +1,53 @@
+---
+// The mark drawn as a technical part: guides cross, the ring is struck, the disc
+// fills, then the bore and slot are cut out of it, dimensioned as they appear.
+// motion.ts owns the sequence; everything here starts in its "not yet drawn" state.
+const dims = [
+  { id: "bt-d1", text: "R 24", top: "calc(50% - 30px)" },
+  { id: "bt-d2", text: "⌀ 16 BORE", top: "50%" },
+  { id: "bt-d3", text: "SLOT 24 × 12", top: "calc(50% + 30px)" },
+];
+---
+
+<div id="boot" class="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-ink">
+  <div class="relative flex size-[300px] items-center justify-center">
+    <div id="bt-gv" class="absolute inset-y-0 left-1/2 w-px scale-y-0 bg-mint/[0.28]"></div>
+    <div id="bt-gh" class="absolute inset-x-0 top-1/2 h-px scale-x-0 bg-mint/[0.28]"></div>
+
+    <svg viewBox="0 0 48 48" width="168" height="168" class="relative overflow-visible">
+      <circle
+        id="bt-ring"
+        cx="24"
+        cy="24"
+        r="23.4"
+        fill="none"
+        stroke="var(--color-mint)"
+        stroke-width="0.7"></circle>
+      <circle id="bt-disc" cx="24" cy="24" r="24" fill="var(--color-mint)" opacity="0"></circle>
+      <circle id="bt-bore" cx="24" cy="24" r="8" fill="var(--color-ink)"></circle>
+      <rect id="bt-slot" x="24" y="18" width="24" height="12" fill="var(--color-ink)"></rect>
+    </svg>
+
+    {
+      dims.map((d) => (
+        <div
+          id={d.id}
+          class="mono absolute left-[calc(50%+92px)] text-[9.5px] tracking-[0.14em] whitespace-nowrap text-mint opacity-0"
+          style={`top:${d.top}`}
+        >
+          {d.text}
+        </div>
+      ))
+    }
+
+    <div
+      id="bt-wm"
+      class="mono absolute inset-x-0 top-[calc(50%+112px)] text-center text-[10px] tracking-[0.26em] text-mute opacity-0"
+    >
+      CHRISTOPHER YU
+    </div>
+  </div>
+</div>
+
+{/* Nothing removes the overlay without JS, so without JS it was never there. */}
+<noscript><style>#boot { display: none; }</style></noscript>

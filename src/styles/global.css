@@ -2,938 +2,535 @@
 
 /* ------------------------------------------------------------------ tokens */
 @theme {
-  --color-ink: #0a0e18;
-  --color-panel: #0d1220;
-  --color-paper: #e9edf5;
-  --color-accent: oklch(0.78 0.13 220);
+  --color-ink: #0b1013; /* page */
+  --color-well: #080c0e; /* rail, recessed */
+  --color-panel: #101718; /* image mounts */
+  --color-line: #212c2c; /* hairlines */
+  --color-edge: #33403f; /* inactive marks */
+  --color-paper: #e7edec; /* headings */
+  --color-mute: #8a9694; /* body */
+  --color-dim: #7a8886; /* labels */
+  --color-mint: #57c8a5; /* accent */
 
-  --font-display: "Space Grotesk", ui-sans-serif, sans-serif;
-  --font-body: "Instrument Sans", system-ui, sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-wipe: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
 /* ------------------------------------------------------------------- base */
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     margin: 0;
     background: var(--color-ink);
     color: var(--color-paper);
-    font-family: var(--font-body);
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
 
-  /* links opt into colour explicitly — most are styled buttons or mono labels */
   a {
     color: inherit;
     text-decoration: none;
   }
 
-  ::selection {
-    background: var(--color-accent);
-    color: var(--color-ink);
-  }
-
-  /* The h-* type utilities each used to carry `margin: 0`, which collided with a
-     margin utility on the same element: both live in the utilities layer, so which
-     one won came down to Tailwind's emit order. Resetting here instead — base always
-     loses to utilities, so a margin utility on a heading now reliably wins. */
   h1,
   h2,
   h3 {
     margin: 0;
   }
 
+  ::selection {
+    background: var(--color-mint);
+    color: var(--color-ink);
+  }
+
   canvas {
     display: block;
+  }
+
+  /* The instrument cursor replaces the system one, so it only hides the native
+     cursor once JS has actually mounted it — never on touch, never if the script
+     dies. Text inputs keep their caret. */
+  html[data-cursor-on] :is(*, a, button, [role="button"]) {
+    cursor: none;
+  }
+  html[data-cursor-on] :is(input, textarea, select, [contenteditable]) {
+    cursor: text;
   }
 }
 
 /* ---------------------------------------------------------------- keyframes */
-@keyframes blink {
+@keyframes blip {
   0%,
-  49% {
+  100% {
     opacity: 1;
   }
-  50%,
-  100% {
-    opacity: 0;
+  50% {
+    opacity: 0.15;
   }
 }
-@keyframes lineup {
+
+/* a packet crossing one link of a left-to-right diagram */
+@keyframes pktx {
   0% {
-    transform: scaleY(0);
+    transform: translateX(-14px);
     opacity: 0;
   }
-  25% {
-    opacity: 0.9;
-  }
-  100% {
-    transform: scaleY(1);
-    opacity: 0.28;
-  }
-}
-@keyframes scan {
-  0% {
-    transform: translateY(-40px);
-    opacity: 0;
-  }
-  12%,
-  88% {
+  18% {
     opacity: 1;
   }
   100% {
-    transform: translateY(105vh);
+    transform: translateX(52px);
     opacity: 0;
   }
 }
-@keyframes glow {
+
+/* the one route that did not resolve, refusing to settle */
+@keyframes flick {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.16;
+  }
+}
+
+/* a packet falling down one leg of the hero diagram */
+@keyframes pkt {
   0% {
-    opacity: 0.1;
-    transform: scale(0.85);
+    transform: translateY(-16px);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
   }
   100% {
-    opacity: 0.34;
-    transform: scale(1.05);
-  }
-}
-@keyframes preout {
-  to {
-    transform: translateY(-101%);
-    visibility: hidden;
-  }
-}
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
+    transform: translateY(46px);
+    opacity: 0;
   }
 }
 
-/* --------------------------------------------------------------- type scale */
-@utility label {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: 0.22em;
-}
-@utility h-hero {
-  font-family: var(--font-display);
-  font-size: clamp(48px, 7.4vw, 116px);
-  font-weight: 500;
-  line-height: 0.94;
-  letter-spacing: -0.045em;
-
-  @media (width <= 600px) {
-    font-size: clamp(34px, 10.5vw, 54px);
-  }
-}
-@utility h-sec {
-  font-family: var(--font-display);
-  font-size: clamp(34px, 4.4vw, 64px);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.035em;
-}
-@utility h-big {
-  font-family: var(--font-display);
-  font-size: clamp(38px, 5.6vw, 86px);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.04em;
-
-  @media (width <= 900px) {
-    font-size: clamp(30px, 8vw, 48px);
-  }
-}
-@utility h-proj {
-  font-family: var(--font-display);
-  font-size: clamp(32px, 3.4vw, 50px);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.035em;
-}
-@utility h-card {
-  font-family: var(--font-display);
-  font-size: 25px;
-  font-weight: 500;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-}
-@utility h-step {
-  font-family: var(--font-display);
-  font-size: 21px;
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -0.02em;
-}
-@utility h-cta {
-  font-family: var(--font-display);
-  font-size: clamp(40px, 6.4vw, 96px);
-  font-weight: 500;
-  line-height: 0.98;
-  letter-spacing: -0.04em;
-}
-@utility stat {
-  font-family: var(--font-display);
-  font-size: 46px;
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.04em;
-}
-
-/* ------------------------------------------------------------------ lattice */
-/* One continuous 90px grid behind the whole page. background-attachment: fixed
-   anchors it to the viewport rather than each box, so every panel's grid lines
-   up with its neighbours' instead of restarting at each boundary. */
-@utility lattice {
-  background-image:
-    linear-gradient(rgba(233, 237, 245, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(233, 237, 245, 0.05) 1px, transparent 1px);
-  background-size: 90px 90px;
-  background-attachment: fixed;
-}
-
-/* -------------------------------------------------- hairline-separated grid */
-/* one shared rule for services / stack / pricing / facts: the 1px gaps read as
-   rules because the container's background shows through between opaque children */
-@utility hair-grid {
-  display: grid;
-  gap: 1px;
-  background: rgba(233, 237, 245, 0.1);
-  border: 1px solid rgba(233, 237, 245, 0.1);
-
-  /* opaque so the gaps read as rules, and carrying the page lattice so the grid
-     runs through the cards instead of stopping at them */
-  & > * {
-    background-color: var(--color-ink);
-    background-image:
-      linear-gradient(rgba(233, 237, 245, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(233, 237, 245, 0.05) 1px, transparent 1px);
-    background-size: 90px 90px;
-    background-attachment: fixed;
-  }
-}
-
-/* small bordered mono chip for tech tags */
-@utility tag {
-  border: 1px solid rgba(233, 237, 245, 0.14);
-  padding: 6px 9px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 400;
-  line-height: 1;
-  color: rgba(233, 237, 245, 0.42);
-}
-
+/* --------------------------------------------------------------- components */
 @layer components {
-  /* --------------------------------------------------------------- preloader */
-  .pre-glow {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 900px;
-    height: 900px;
-    margin: -450px 0 0 -450px;
-    border-radius: 50%;
-    animation: glow 2.4s ease-out both;
-    background: radial-gradient(
-      circle,
-      oklch(0.78 0.13 220 / 0.3) 0%,
-      oklch(0.78 0.13 220 / 0.1) 34%,
-      transparent 68%
-    );
-  }
-  .pre-line {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    transform-origin: bottom;
-    animation: lineup 0.95s cubic-bezier(0.2, 0.8, 0.2, 1) both;
-    background: linear-gradient(
-      180deg,
-      transparent,
-      oklch(0.78 0.13 220 / 0.55) 38%,
-      oklch(0.78 0.13 220 / 0.18) 72%,
-      transparent
-    );
-  }
-  .pre-scan {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    height: 1px;
-    animation: scan 2.4s 0.1s cubic-bezier(0.5, 0, 0.5, 1) both;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      var(--color-accent),
-      transparent
-    );
-    box-shadow: 0 0 26px 2px oklch(0.78 0.13 220 / 0.5);
-  }
-  /* the overlay leaves on its own schedule — JS only drives the counter */
-  #pre {
-    animation: preout 0.95s 2.75s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  /* Every mono label on the page: rail, captions, specs, buttons. */
+  .mono {
+    font-family: var(--font-mono);
+    letter-spacing: 0.1em;
   }
 
-  /* ----------------------------------------------------------------- reveals */
-  /* text slides up from behind its own overflow box */
-  .mask {
-    display: block;
-    overflow: hidden;
-    padding-bottom: 0.14em;
-    margin-bottom: -0.14em;
-  }
-  .mask > span {
-    display: block;
-    will-change: transform;
+  /* "§ 03 — SYSTEMS" */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.15em;
+    color: var(--color-mint);
   }
 
-  /* ----------------------------------------------------------------- buttons */
-  .btn {
+  /* Content sits right of the rail on desktop and full-bleed below it. */
+  .shell {
     position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 13px;
+    z-index: 10;
+  }
+
+  .section {
+    padding: clamp(56px, 7vw, 80px) clamp(20px, 4vw, 44px) clamp(60px, 7.4vw, 84px)
+      clamp(20px, 3.6vw, 40px);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  /* Buttons wipe a fill in from an edge and swap colours behind it. The fill is a
+     pseudo-element under the label rather than a background transition, so the
+     text stays readable mid-wipe. */
+  .btn,
+  .btn-ghost {
+    position: relative;
     isolation: isolate;
     overflow: hidden;
-    border-radius: 999px;
-    white-space: nowrap;
-    cursor: pointer;
-    will-change: transform;
-    /* --btn-x/y come from the magnetic pointer handler in motion.ts */
-    transform: translate(var(--btn-x, 0px), var(--btn-y, 0px))
-      scale(var(--btn-s, 1));
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 21px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
     transition:
-      transform 0.5s var(--ease-expo),
-      box-shadow 0.5s var(--ease-expo),
-      border-color 0.4s var(--ease-expo);
-  }
-  .btn:active {
-    --btn-s: 0.96;
+      color 0.26s linear,
+      border-color 0.26s linear;
   }
 
-  /* fill: the page lattice, lighting up cell by cell on a diagonal sweep */
-  .btn-mesh {
+  .btn::before,
+  .btn-ghost::before {
+    content: "";
     position: absolute;
     inset: 0;
     z-index: -1;
-    display: grid;
-    grid-template-columns: repeat(14, 1fr);
-    grid-template-rows: repeat(4, 1fr);
-    pointer-events: none;
-  }
-  .btn-mesh > i {
-    opacity: 0;
-    transform: scale(0.4);
-    transition:
-      opacity 0.3s var(--d) linear,
-      transform 0.38s var(--d) var(--ease-expo);
-  }
-  .btn:hover .btn-mesh > i {
-    opacity: 1;
-    transform: scale(1);
+    transition: transform 0.38s var(--ease-wipe);
   }
 
-  /* chevron slot: the leading glyph steps out as its twin steps in */
-  .btn-ico {
-    position: relative;
-    z-index: 2;
-    display: block;
-    flex: none;
-    width: 13px;
-    height: 13px;
-    overflow: hidden;
+  /* Borders, never inset shadows: the wipe panel is a z-index:-1 child, which paints
+     above the parent's background, and an inset shadow paints with the background,
+     so the panel used to cover the outline entirely. A border sits outside the
+     padding box the panel is sized to, so it survives the wipe.
+     A mint fill then carries an INK edge, not a darker mint one: a mint-on-mint
+     border is no border, and mint darkened by 15% is still only 1.6:1 against the
+     fill, which at 1px is nothing. Ink is the page colour, so it reads as a cut
+     edge and gives two adjacent mint buttons a real gap. A dark fill inverts it
+     and takes the full mint edge. */
+  .btn {
+    border: 1px solid var(--color-ink);
+    background: var(--color-mint);
+    color: var(--color-ink);
+    font-weight: 500;
   }
-  .btn-ico > svg {
-    position: absolute;
-    inset: 0;
-    width: 13px;
-    height: 13px;
-    transition: transform 0.5s var(--ease-expo);
+  .btn::before {
+    background: var(--color-ink);
+    transform: translateY(101%);
   }
-  .btn-ico > svg:nth-child(2) {
-    transform: translateX(-13px);
+  .btn:hover::before {
+    transform: translateY(0);
   }
-  .btn:hover .btn-ico > svg:nth-child(1) {
-    transform: translateX(13px);
+  .btn:hover {
+    border-color: var(--color-mint);
+    color: var(--color-mint);
   }
-  .btn:hover .btn-ico > svg:nth-child(2) {
+
+  .btn-ghost {
+    border: 1px solid color-mix(in srgb, var(--color-mint) 42%, transparent);
+    color: var(--color-mint);
+  }
+  /* A tint, not a mint fill. The source design filled ghosts solid on hover, but it
+     never put one next to a primary: filled, the ghost became pixel-identical to a
+     resting primary, so the only thing telling you which button you were on was the
+     cursor. The two now stay different objects in every state. */
+  .btn-ghost::before {
+    background: color-mix(in srgb, var(--color-mint) 12%, transparent);
+    transform: translateX(-101%);
+  }
+  .btn-ghost:hover::before {
     transform: translateX(0);
   }
-
-  /* Mesh cells tile exactly in layout, but buttons are fractional sizes (a 53.4px
-     tall button / 4 rows = 13.35px), so every cell boundary straddles a device
-     pixel. Each cell carries a transform and is therefore rasterised on its own,
-     and two partial coverages of the same physical pixel do not composite to
-     opaque — which showed as hairlines across the fill. The colour-matched 1px
-     spread below bleeds each cell over its seams; same colour, so invisible. */
-  .btn-p {
-    background: var(--color-accent);
-    color: var(--color-ink);
-    font-family: var(--font-body);
-    font-size: 14.5px;
-    font-weight: 600;
-    line-height: 1;
-  }
-  .btn-p .btn-mesh > i {
-    background: var(--color-ink);
-    box-shadow: 0 0 0 1px var(--color-ink);
-  }
-  .btn-p:hover {
-    box-shadow: 0 14px 38px -14px oklch(0.78 0.13 220 / 0.6);
-  }
-  .btn-p:hover .flip > span > span,
-  .btn-p:hover .btn-ico {
-    color: var(--color-accent);
-  }
-
-  .btn-s {
-    border: 1px solid rgba(233, 237, 245, 0.2);
-    color: var(--color-paper);
-    font-family: var(--font-body);
-    font-size: 14.5px;
-    font-weight: 500;
-    line-height: 1;
-  }
-  .btn-s .btn-mesh > i {
-    background: var(--color-accent);
-    box-shadow: 0 0 0 1px var(--color-accent);
-  }
-  .btn-s:hover {
-    border-color: var(--color-accent);
-  }
-  .btn-s:hover .flip > span > span,
-  .btn-s:hover .btn-ico {
-    color: var(--color-ink);
-  }
-
-  /* ------------------------------------------------- per-character flip label */
-  /* shared by buttons and nav links: every glyph gets its own clipped slot over a
-     doubled stack, so the word rolls over letter by letter instead of as a block */
-  .flip {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    white-space: pre;
-  }
-  .flip > span {
-    display: block;
-    overflow: hidden;
-    height: 1.2em;
-    line-height: 1.2;
-  }
-  .flip > span > span {
-    display: block;
-    transition:
-      transform var(--flip-dur, 0.46s) calc(var(--i) * var(--flip-step, 0.022s))
-        var(--ease-expo),
-      color 0.3s calc(var(--i) * var(--flip-step, 0.022s)) linear;
-  }
-  .flip > span > span > span {
-    display: block;
-    line-height: 1.2;
-  }
-  .btn:hover .flip > span > span,
-  .hx:hover .flip > span > span {
-    transform: translateY(-50%);
-  }
-
-  /* The section counter, identical at all five call sites. data-px is already the
-     shared hook motion.ts drifts, so the typography hangs off the same attribute. */
-  [data-px] {
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    line-height: 1;
-    color: rgba(233, 237, 245, 0.35);
-  }
-
-  /* ---------------------------------------------------------------- nav links */
-  .hx {
-    position: relative;
-    display: inline-flex;
-    --flip-dur: 0.42s;
-    --flip-step: 0.025s;
-  }
-  .hx:hover .flip > span > span {
-    color: var(--color-accent);
-  }
-  /* draws in from the left, retracts to the right: the origin flips on unhover */
-  .hx-rule {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -5px;
-    height: 1px;
-    background: var(--color-accent);
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 0.45s var(--ease-expo);
-  }
-  .hx:hover .hx-rule {
-    transform: scaleX(1);
-    transform-origin: left;
-  }
-
-  /* ------------------------------------------------------------ mobile drawer */
-  #burger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    width: 40px;
-    height: 40px;
-    padding: 0 10px;
-    background: transparent;
-    border: 1px solid rgba(233, 237, 245, 0.18);
-    border-radius: 10px;
-    cursor: pointer;
-  }
-  #burger > span {
-    display: block;
-    height: 1.5px;
-    background: var(--color-paper);
-    transition:
-      transform 0.4s var(--ease-expo),
-      opacity 0.3s;
-  }
-  #burger[aria-expanded="true"] > span:nth-child(1) {
-    transform: translateY(3.2px) rotate(45deg);
-  }
-  #burger[aria-expanded="true"] > span:nth-child(2) {
-    transform: translateY(-3.2px) rotate(-45deg);
-  }
-
-  #drawer {
-    position: fixed;
-    inset: 0;
-    z-index: 119;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 6px;
-    padding: 0 7vw;
-    background: var(--color-ink);
-    opacity: 0;
-    /* pointer-events, not visibility: `inert` on the element carries focus and a11y
-       state, and it applies instantly instead of waiting on a transition */
-    pointer-events: none;
-    transform: translateY(-14px);
-    transition:
-      opacity 0.4s var(--ease-expo),
-      transform 0.5s var(--ease-expo);
-  }
-  #drawer[data-open] {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0);
-  }
-  .dl {
-    padding: 8px 0;
-    font-family: var(--font-display);
-    font-size: 34px;
-    font-weight: 500;
-    line-height: 1.25;
-    letter-spacing: -0.03em;
-    opacity: 0;
-    transform: translateY(18px);
-    transition:
-      opacity 0.5s calc(0.06s + var(--i) * 0.05s) var(--ease-expo),
-      transform 0.55s calc(0.06s + var(--i) * 0.05s) var(--ease-expo);
-  }
-  #drawer[data-open] .dl {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* ------------------------------------------------------- spotlight surfaces */
-  /* services + pricing cards: cursor-tracked glow behind content, edge draws in */
-  .spot {
-    position: relative;
-    overflow: hidden;
-    transition: background 0.4s;
-  }
-  /* content sits above the glow; .flag opts out so it can position itself */
-  .spot > *:not(.flag) {
-    position: relative;
-    z-index: 1;
-  }
-  .spot::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 0;
-    width: 460px;
-    height: 460px;
-    margin: -230px 0 0 -230px;
-    border-radius: 50%;
-    pointer-events: none;
-    opacity: 0;
-    will-change: transform;
-    transition: opacity 0.5s;
-    /* --sx/--sy come from the pointer handler in motion.ts */
-    transform: translate3d(var(--sx, 0px), var(--sy, 0px), 0);
-    background: radial-gradient(
-      circle,
-      oklch(0.78 0.13 220 / 0.17) 0%,
-      oklch(0.78 0.13 220 / 0.05) 42%,
-      transparent 72%
-    );
-  }
-  .spot:hover::before {
-    opacity: 1;
-  }
-  .spot::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    z-index: 2;
-    height: 1px;
-    background: var(--color-accent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.7s var(--ease-expo);
-  }
-  .spot:hover::after {
-    transform: scaleX(1);
-  }
-  /* ponytail: !important beats hair-grid's opaque-child rule. It is a utility, and
-     the utilities layer wins over components whatever the specificity — same
-     collision as .stack-cell:hover below. */
-  .sv:hover {
-    background-color: rgba(233, 237, 245, 0.035) !important;
-  }
-  /* the leading mono number lifts with the card */
-  .sv-n {
-    transition: transform 0.5s var(--ease-expo);
-  }
-  .sv:hover .sv-n {
-    transform: translateY(-3px);
-  }
-
-  /* ------------------------------------------------------------ project frame */
-  .frame {
-    position: relative;
-    display: block;
-  }
-  .frame-i {
-    border: 1px solid rgba(233, 237, 245, 0.14);
-    border-radius: 12px;
-    overflow: hidden;
-    background: var(--color-panel);
-    box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.9);
-    transition: border-color 0.5s;
-    will-change: transform;
-  }
-  .frame:hover .frame-i {
-    border-color: oklch(0.78 0.13 220 / 0.55);
-  }
-  /* upward accent wash */
-  .frame::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.5s;
-    background: linear-gradient(
-      to top,
-      oklch(0.78 0.13 220 / 0.14),
-      transparent 60%
-    );
-  }
-  .frame:hover::after {
-    opacity: 1;
-  }
-  /* four corner brackets draw inward, staggered */
-  .frame > span {
-    position: absolute;
-    z-index: 3;
-    width: 20px;
-    height: 20px;
-    pointer-events: none;
-    opacity: 0;
-    transition:
-      opacity 0.45s var(--ease-expo),
-      transform 0.55s var(--ease-expo);
-  }
-  .frame:hover > span {
-    opacity: 1;
-    transform: translate(0, 0);
-  }
-  .frame > span:nth-child(1) {
-    top: 9px;
-    left: 9px;
-    border-top: 1px solid var(--color-accent);
-    border-left: 1px solid var(--color-accent);
-    transform: translate(-7px, -7px);
-  }
-  .frame > span:nth-child(2) {
-    bottom: 9px;
-    left: 9px;
-    border-bottom: 1px solid var(--color-accent);
-    border-left: 1px solid var(--color-accent);
-    transform: translate(-7px, 7px);
-    transition-delay: 0.04s;
-  }
-  .frame > span:nth-child(3) {
-    top: 9px;
-    right: 9px;
-    border-top: 1px solid var(--color-accent);
-    border-right: 1px solid var(--color-accent);
-    transform: translate(7px, -7px);
-    transition-delay: 0.08s;
-  }
-  .frame > span:nth-child(4) {
-    bottom: 9px;
-    right: 9px;
-    border-bottom: 1px solid var(--color-accent);
-    border-right: 1px solid var(--color-accent);
-    transform: translate(7px, 7px);
-    transition-delay: 0.12s;
-  }
-  /* the outward link's arrow nudges with the panel */
-  .wp-a {
-    display: inline-block;
-    transition: transform 0.35s var(--ease-expo);
-  }
-  .wp:hover .wp-a {
-    transform: translate(3px, -3px);
-  }
-
-  /* ------------------------------------------------------------ process steps */
-  .ps {
-    padding-bottom: 4px;
-    transition: background 0.4s;
-  }
-  .ps-rule {
-    height: 2px;
-    background: rgba(233, 237, 245, 0.16);
-    transform-origin: left;
-    transition:
-      background 0.4s,
-      height 0.35s;
-  }
-  .ps:first-child .ps-rule {
-    background: var(--color-accent);
-  }
-  .ps h3 {
-    transition: color 0.35s;
-  }
-  .ps:hover {
-    background-color: rgba(233, 237, 245, 0.035);
-  }
-  .ps:hover .ps-rule {
-    background: var(--color-accent);
-    height: 3px;
-  }
-  .ps:hover h3 {
-    color: var(--color-accent);
-  }
-
-  /* ------------------------------------------------------------- stack cells */
-  .stack-cell {
-    transition: background 0.4s;
-  }
-  /* ponytail: !important beats hair-grid's opaque-child rule, which is a utility */
-  .stack-cell:hover {
-    background-color: rgba(233, 237, 245, 0.035) !important;
-  }
-  .stack-cell dt {
-    transition: color 0.3s;
-  }
-  .stack-cell:hover dt {
-    color: var(--color-accent);
-  }
-  .stack-cell dd {
-    transition:
-      transform 0.45s var(--ease-expo),
-      color 0.3s;
-    transition-delay: calc(var(--i, 0) * 0.035s);
-  }
-  .stack-cell:hover dd {
-    transform: translateX(6px);
+  .btn-ghost:hover {
+    border-color: var(--color-mint);
     color: var(--color-paper);
   }
 
-  /* work section rail: the active case-study number brightens */
-  .wr {
-    color: rgba(233, 237, 245, 0.25);
-    transition: color 0.4s;
-  }
-  .wr[data-on] {
-    color: rgba(233, 237, 245, 0.9);
-  }
-
-  /* ----------------------------------------------------------- timeline rows */
-  .tl {
-    position: relative;
+  .navlink {
     transition:
-      padding-left 0.5s var(--ease-expo),
-      background 0.5s;
+      color 0.2s linear,
+      letter-spacing 0.3s var(--ease-expo);
   }
-  .tl::before {
-    content: "";
-    position: absolute;
-    left: -5vw;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: var(--color-accent);
-    transform: scaleY(0);
-    transition: transform 0.5s var(--ease-expo);
-  }
-  .tl:hover {
-    padding-left: 18px;
-    background-color: rgba(233, 237, 245, 0.025);
-  }
-  .tl:hover::before {
-    transform: scaleY(1);
+  .navlink:hover {
+    color: var(--color-paper);
+    letter-spacing: 0.17em;
   }
 
-  /* -------------------------------------------------------------- accent link */
-  .link {
-    color: var(--color-accent);
-    transition: color 0.3s;
-  }
-  .link:hover {
-    color: oklch(0.86 0.11 220);
+  /* One headline line, clipped so the wipe has an edge to rise past. */
+  .line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.16em;
+    margin-bottom: -0.16em;
   }
 
-  /* ------------------------------------------------------------- cursor ring */
-  .ring {
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 250;
+  /* Cells separated by 1px of the line colour showing through the gaps, which is
+     one hairline between neighbours instead of two touching borders. */
+  .hairgrid {
     display: grid;
-    place-items: center;
-    width: 22px;
-    height: 22px;
-    margin: -11px 0 0 -11px;
-    border: 1px solid oklch(0.78 0.13 220 / 0.7);
-    border-radius: 999px;
-    pointer-events: none;
-    opacity: 0;
-    will-change: transform;
-    transition:
-      width 0.35s var(--ease-expo),
-      height 0.35s var(--ease-expo),
-      margin 0.35s var(--ease-expo),
-      opacity 0.3s,
-      background 0.35s,
-      border-color 0.35s;
+    gap: 1px;
+    background: var(--color-line);
+    border: 1px solid var(--color-line);
   }
-  .ring[data-big] {
-    width: 58px;
-    height: 58px;
-    margin: -29px 0 0 -29px;
-    background: var(--color-accent);
-    border-color: var(--color-accent);
+  .hairgrid > * {
+    background: var(--color-ink);
   }
-  .ring > span {
+
+  /* Label column against a description column: data model rows, engagement modes. */
+  .rows {
+    border: 1px solid var(--color-line);
+  }
+  .rows > * {
+    display: grid;
+    grid-template-columns: var(--rows-label, 180px) var(--rows-body, 1fr);
+    border-bottom: 1px solid var(--color-line);
+  }
+  .rows > *:last-child {
+    border-bottom: 0;
+  }
+  .rows > * > :first-child {
+    border-right: 1px solid var(--color-line);
+  }
+
+  /* Index row: a mint rule draws across the top and the whole row tints. */
+  .row {
+    position: relative;
+    transition: background-color 0.35s linear;
+  }
+  .row::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 0;
+    height: 1px;
+    width: 0;
+    background: var(--color-mint);
+    transition: width 0.5s var(--ease-expo);
+  }
+  .row:hover::before {
+    width: 100%;
+  }
+  .row:hover {
+    background-color: color-mix(in srgb, var(--color-mint) 5%, var(--color-ink));
+  }
+
+  /* Sub-page table of contents: sticky, and the active entry lights. */
+  .toc a {
+    display: block;
+    color: var(--color-mute);
+    transition: color 0.25s linear;
+  }
+  .toc a:hover,
+  .toc a[data-on] {
+    color: var(--color-mint);
+  }
+
+  /* Image mount: hairline frame, panel bed, caption underneath. */
+  .frame {
+    border: 1px solid var(--color-line);
+    background: var(--color-panel);
+    padding: 9px;
+  }
+  /* No hover transform here: the reveal animation owns this element's transform,
+     and an inline one from GSAP would beat the rule anyway. */
+  .frame img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    object-position: top left;
+  }
+
+  .figcap {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 2px 1px;
     font-family: var(--font-mono);
-    font-size: 10.5px;
-    font-weight: 600;
-    line-height: 1;
-    letter-spacing: 0.08em;
-    color: var(--color-ink);
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.25s;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--color-dim);
   }
-  .ring[data-big] > span {
-    opacity: 1;
+
+
+  /* Service card: a hairline draws across the top and a tick down the left. */
+  /* Background comes from .hairgrid > *; this only adds the drawn corner. */
+  .card {
+    position: relative;
+    transition: background-color 0.3s linear;
   }
-  /* 1:1 dot: with the system cursor hidden, this is what keeps the aim honest */
-  .dot {
-    position: fixed;
+  .card::before,
+  .card::after {
+    content: "";
+    position: absolute;
     left: 0;
     top: 0;
-    z-index: 251;
-    width: 5px;
-    height: 5px;
-    margin: -2.5px 0 0 -2.5px;
-    border-radius: 999px;
-    background: var(--color-paper);
-    pointer-events: none;
-    opacity: 0;
-    will-change: transform;
-    transition:
-      opacity 0.3s,
-      width 0.3s,
-      height 0.3s,
-      margin 0.3s;
+    background: var(--color-mint);
   }
-  /* over a labelled target the ring takes over, so the dot gets out of the way */
-  .dot[data-big] {
+  .card::before {
+    height: 1px;
     width: 0;
-    height: 0;
-    margin: 0;
+    transition: width 0.42s var(--ease-expo);
   }
-  @media (pointer: coarse) {
-    .ring,
-    .dot {
-      display: none;
-    }
+  .card::after {
+    width: 1px;
+    height: 0;
+    transition: height 0.42s var(--ease-expo) 0.07s;
+  }
+  .card:hover::before {
+    width: 100%;
+  }
+  .card:hover::after {
+    height: 40px;
+  }
+  .card:hover {
+    background-color: color-mix(in srgb, var(--color-mint) 5%, var(--color-ink));
   }
 }
 
-/* ------------------------------------------------------------ reduced motion */
+/* Page transition: one panel, reused. It ships covering the viewport and gets out
+   of the way by CSS animation, so arriving never depends on JS running — a frozen
+   background tab or a script that failed still uncovers. JS only drives the exit,
+   sending the same panel back down before the browser navigates. */
+#tx {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-ink);
+  pointer-events: none;
+  will-change: transform;
+  animation: tx-open 560ms var(--ease-wipe) 60ms both;
+}
+
+@keyframes tx-open {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+/* the mint edge that leads the panel, so the wipe has a visible boundary */
+#tx::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: var(--color-mint);
+  opacity: 0.55;
+}
+
+/* The mark shows while the panel covers and fades as it lands on the way out. */
+#tx svg {
+  transition: opacity 0.18s linear;
+}
+#tx:not([data-show]) svg {
+  opacity: 0;
+}
+
+/* Everywhere else the spine passes behind something opaque — the hero panel, the
+   work frames, the service cards — or through open space. About is the one
+   section whose prose reaches into its column, and wireframe lines crossing words
+   read as a rendering glitch, so this section gets solid ground. */
+#about {
+  background: var(--color-ink);
+}
+
+/* ------------------------------------------------------- instrument cursor */
+/* Static shape lives here; cursor.ts only moves it and flips two classes.
+   Bracket arms + centre dot at rest, a frame around whatever is hoverable, a
+   caret over long text. */
+[data-cur] {
+  position: fixed;
+  top: -100px;
+  left: -100px;
+  z-index: 400;
+  pointer-events: none;
+}
+
+#cur-box {
+  width: 12px;
+  height: 12px;
+  transition:
+    width 0.17s var(--ease-expo),
+    height 0.17s var(--ease-expo),
+    left 0.1s linear,
+    top 0.1s linear,
+    opacity 0.14s linear;
+}
+
+#cur-box i {
+  position: absolute;
+  background: var(--color-mint);
+  transition:
+    width 0.17s var(--ease-expo),
+    height 0.17s var(--ease-expo),
+    opacity 0.14s linear;
+}
+#cur-box i:nth-child(1),
+#cur-box i:nth-child(3) {
+  width: 4px;
+  height: 1px;
+}
+#cur-box i:nth-child(2),
+#cur-box i:nth-child(4) {
+  width: 1px;
+  height: 4px;
+}
+#cur-box i:nth-child(1),
+#cur-box i:nth-child(2) {
+  top: 0;
+  left: 0;
+}
+#cur-box i:nth-child(3),
+#cur-box i:nth-child(4) {
+  right: 0;
+  bottom: 0;
+}
+
+#cur-box b {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 2px;
+  background: var(--color-mint);
+  transform: translate(-1px, -1px);
+  transition: opacity 0.14s linear;
+}
+
+/* framing a hoverable element: arms extend, dot drops out */
+#cur-box.on i:nth-child(odd) {
+  width: 10px;
+}
+#cur-box.on i:nth-child(even) {
+  height: 10px;
+}
+#cur-box.on b {
+  opacity: 0;
+}
+
+/* over a filled mint control, the marks invert so they stay visible */
+#cur-box.dark i,
+#cur-box.dark b {
+  background: var(--color-ink);
+}
+
+/* over long-form text: the frame collapses and a caret takes over */
+#cur-box.text i,
+#cur-box.text b {
+  opacity: 0;
+}
+
+#cur-lab {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: var(--color-mint);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.13s linear;
+}
+
+#cur-caret {
+  z-index: 399;
+  width: 2px;
+  height: 19px;
+  background: var(--color-mint);
+  opacity: 0;
+  transition: opacity 0.12s linear;
+}
+
+/* Motion is decoration here — every reveal has a static resting state, so cutting
+   it costs nothing but the animation. */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-}
-
-/* ------------------------------------------------------------------ responsive */
-/* Unlayered on purpose: these override Tailwind utilities, and unlayered CSS wins
-   over any @layer, so none of this needs !important. */
-@media (max-width: 1080px) {
-  #navLinks {
-    gap: 18px;
-  }
-}
-@media (max-width: 900px) {
-  #navLinks {
-    display: none;
-  }
-  #burger {
-    display: flex;
-  }
-  header {
-    padding: 14px 5vw;
-  }
-}
-@media (max-width: 600px) {
-  /* #statement is excluded: it has no padding of its own, and adding some would
-     inset the absolutely-positioned curtain panels */
-  section:not(#statement) {
-    padding-left: 6vw;
-    padding-right: 6vw;
-  }
-}
-
-/* the system cursor is only hidden once motion.ts has actually built a replacement,
-   so no-JS and reduced-motion visitors keep a real pointer */
-@media (pointer: fine) {
-  html.has-cursor,
-  html.has-cursor * {
-    cursor: none !important;
   }
 }

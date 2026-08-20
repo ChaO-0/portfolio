@@ -1,0 +1,42 @@
+---
+import { site } from "../data/site";
+
+// The closing pair on every page. It was written out eight times with the two
+// layouts drifting apart: four used "BOOK A CALL", three "BOOK 30 MINUTES", and
+// the button gaps differed by 2px. One action, one label.
+interface Props {
+  heading: string;
+  /** inline sets the buttons beside the heading, stacked puts them underneath. */
+  layout?: "inline" | "stacked";
+}
+
+const { heading, layout = "stacked" } = Astro.props;
+const inline = layout === "inline";
+const size = inline ? "px-[22px] py-4 text-[11.5px]" : "px-6 py-[18px] text-xs tracking-[0.06em]";
+---
+
+<div
+  data-reveal
+  class:list={[
+    "mt-16 border-t border-line pt-9",
+    inline && "flex flex-wrap items-center justify-between gap-3.5",
+  ]}
+>
+  <div
+    class:list={[
+      "tracking-[-0.02em]",
+      inline ? "max-w-[440px] text-[22px]" : "mb-[22px] max-w-[520px] text-[26px]",
+    ]}
+  >
+    {heading}
+  </div>
+
+  <div class="flex flex-wrap items-stretch gap-3">
+    <a href={`mailto:${site.email}`} class:list={["btn gap-3", size]}>
+      {site.email} <span>→</span>
+    </a>
+    <a href={site.calendly} target="_blank" rel="noopener" class:list={["btn-ghost gap-3", size]}>
+      BOOK 30 MINUTES <span>→</span>
+    </a>
+  </div>
+</div>

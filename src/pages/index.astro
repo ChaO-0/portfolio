@@ -1,19 +1,12 @@
 ---
 import About from "../components/About.astro";
+import Boot from "../components/Boot.astro";
 import Contact from "../components/Contact.astro";
-import Curtain from "../components/Curtain.astro";
-import Drawer from "../components/Drawer.astro";
-import Footer from "../components/Footer.astro";
-import Github from "../components/Github.astro";
-import Header from "../components/Header.astro";
 import Hero from "../components/Hero.astro";
-import Marquee from "../components/Marquee.astro";
-import Preloader from "../components/Preloader.astro";
-import Pricing from "../components/Pricing.astro";
-import Process from "../components/Process.astro";
+import Rail from "../components/Rail.astro";
 import Services from "../components/Services.astro";
-import Stack from "../components/Stack.astro";
-import Timeline from "../components/Timeline.astro";
+import Systems from "../components/Systems.astro";
+import Topbar from "../components/Topbar.astro";
 import Work from "../components/Work.astro";
 import { site } from "../data/site";
 import Base from "../layouts/Base.astro";
@@ -21,33 +14,25 @@ import Base from "../layouts/Base.astro";
 
 <Base
   title={`${site.name} · ${site.role}`}
-  description="TypeScript engineer: Next.js, NestJS, Postgres. Five years in production, three where the ledger had to balance. SaaS, dashboards and internal tools, built end to end by one person."
+  description="Product engineer building SaaS, internal tools and product websites end to end. Interface, API, schema, architecture and deploys, built by the person you talk to. Senior engineering without agency overhead."
+  ogType="profile"
 >
-  <Preloader />
+  <Boot />
 
-  <div class="fixed top-0 left-0 z-[150] h-0.5 w-full">
-    <div id="prog" class="h-full w-full origin-left scale-x-0 bg-accent"></div>
-  </div>
+  {/* three.js spine, faded in after the intro and driven by scroll */}
+  <div id="spine" class="pointer-events-none fixed inset-0 z-0 opacity-0"></div>
 
-  <Header />
-  <Drawer />
+  <Rail />
+  <Topbar />
 
-  <main>
+  <main class="shell lg:ml-[74px]">
     <Hero />
-    <Services />
     <Work />
-    <Marquee />
-    <Curtain />
-    <Process />
-    <Stack />
+    <Systems />
+    <Services />
     <About />
-    <Timeline />
-    <Pricing />
-    <Github />
     <Contact />
   </main>
-
-  <Footer />
 </Base>
 
 <script>

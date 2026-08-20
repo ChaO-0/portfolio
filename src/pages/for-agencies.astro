@@ -1,0 +1,100 @@
+---
+import { agency, site } from "../data/site";
+import Cta from "../components/Cta.astro";
+import Doc from "../layouts/Doc.astro";
+
+const toc = [
+  ...agency.points.map((p, i) => ({
+    id: `a${i + 1}`,
+    label: `${String(i + 1).padStart(2, "0")}  ${p.nav}`,
+  })),
+  { id: "fit", label: "IS THIS A FIT" },
+];
+
+const meta = [
+  { k: "MODE", v: "White-label" },
+  { k: "OVERLAP", v: "Your morning" },
+  { k: "MINIMUM", v: "One month" },
+  { k: "FROM", v: `${agency.price.replace("from ", "")} / month`, accent: true },
+];
+---
+
+<Doc
+  title={`For agencies · ${site.name}`}
+  description="Senior engineering capacity for design and digital agencies, by the month. White-label, frontend and backend, hours that overlap yours, no full-time hire."
+  label="FOR AGENCIES"
+  back={{ href: "/", label: site.name.toUpperCase() }}
+  meta={meta}
+  tocTitle="On this page"
+  toc={toc}
+  tocSplit={agency.points.length - 1}
+>
+  <Fragment slot="headline">
+    <div class="eyebrow mb-[26px]">FOR DESIGN AND DIGITAL AGENCIES</div>
+    <h1
+      class="max-w-[860px] text-[clamp(42px,5.8vw,80px)] leading-[0.97] font-medium tracking-[-0.04em]"
+    >
+      <span class="line"><span data-line class="block">Engineering capacity,</span></span>
+      <span class="line"
+        ><span data-line class="block">without the <span class="text-mint">hire</span>.</span></span
+      >
+    </h1>
+    <p class="mt-[30px] max-w-[620px] text-[18.5px] leading-[1.6] text-mute">
+      You win work you cannot staff. I take the build, work off your board or a written brief, and
+      hand back shipped features under your name. Monthly, cancellable, no recruitment, and your
+      client never has to know there is a second company involved.
+    </p>
+  </Fragment>
+
+  {
+    agency.points.map((p, i) => (
+      <section
+        id={`a${i + 1}`}
+        class:list={["scroll-mt-[90px]", i > 0 && "mt-[54px] border-t border-line pt-[44px]"]}
+      >
+        <div class="flex items-baseline gap-3.5">
+          <span class="mono text-xs text-mint">{String(i + 1).padStart(2, "0")}</span>
+          <h2 data-reveal class="text-[30px] leading-[1.1] font-medium tracking-[-0.03em]">
+            {p.title}
+          </h2>
+        </div>
+        <p data-reveal class="mt-3.5 max-w-[680px] text-lg leading-[1.65] text-mute">{p.body}</p>
+      </section>
+    ))
+  }
+
+  <section id="fit" class="mt-[70px] scroll-mt-[90px] border-t border-line pt-[52px]">
+    <div class="eyebrow mb-5">IS THIS A FIT</div>
+    <h2 data-reveal class="text-[34px] leading-[1.12] font-medium tracking-[-0.025em]">
+      Best when the design is good and the engineering is the gap.
+    </h2>
+    <p data-reveal class="mt-[22px] max-w-[680px] text-lg leading-[1.65] text-mute">
+      Agencies that design well and then hand the build to whoever is available, or turn work away
+      because there is nobody to give it to. I am one senior engineer, so I am capacity, not a
+      department: if a project genuinely needs three people in parallel from day one, I will say so
+      rather than take the month.
+    </p>
+
+    <div data-reveal class="hairgrid mono mt-7 text-[11px] sm:grid-cols-3">
+      <div class="px-[18px] py-4">
+        <div class="mb-[7px] text-dim">FROM</div>
+        <div class="text-xl tracking-[-0.01em] text-paper">{agency.price}</div>
+      </div>
+      <div class="px-[18px] py-4">
+        <div class="mb-[7px] text-dim">MINIMUM</div>
+        <div class="text-xl tracking-[-0.01em] text-paper">One month</div>
+      </div>
+      <div class="px-[18px] py-4">
+        <div class="mb-[7px] text-dim">NOTICE TO STOP</div>
+        <div class="text-xl tracking-[-0.01em] text-paper">Two weeks</div>
+      </div>
+    </div>
+
+    <p data-reveal class="mt-[22px] max-w-[680px] text-base leading-[1.6] text-dim">
+      A starting point, not a quote. How many days a week, and what they cost, comes out of a call
+      and lands in writing before either of us commits to anything.
+    </p>
+  </section>
+
+  <Cta heading="Tell me what you have sold and cannot staff." />
+</Doc>

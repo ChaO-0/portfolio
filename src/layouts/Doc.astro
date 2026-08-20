@@ -1,0 +1,82 @@
+---
+import DocBar from "../components/DocBar.astro";
+import DocFooter from "../components/DocFooter.astro";
+import Base from "./Base.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  ogType?: "website" | "profile" | "article";
+  /** Centre label in the bar, e.g. "SERVICES" or "CASE STUDY 01 / MONARK". */
+  label: string;
+  back: { href: string; label: string };
+  /** Label/value rows for the column beside the headline. */
+  meta: { k: string; v: string; accent?: boolean }[];
+  tocTitle: string;
+  toc: { id: string; label: string }[];
+  /** Index in `toc` after which a divider is drawn, for a trailing odd entry. */
+  tocSplit?: number;
+}
+
+const { title, description, ogType, label, back, meta, tocTitle, toc, tocSplit } = Astro.props;
+---
+
+<Base title={title} description={description} ogType={ogType}>
+  {/* scaleX rather than width: transform is the cheap property to scrub */}
+  <div id="prog" class="fixed top-0 left-0 z-40 h-0.5 w-full origin-left scale-x-0 bg-mint"></div>
+
+  <DocBar label={label} back={back} />
+
+  <main>
+    <div class="border-b border-line px-5 pt-[116px] pb-14 sm:px-8 lg:px-11 lg:pt-[132px]">
+      <div class="grid items-end gap-14 lg:grid-cols-[1fr_320px]">
+        <div><slot name="headline" /></div>
+        {/* fixed label column rather than padded spaces, so the values line up */}
+        <dl class="mono m-0 border-l border-line pl-5 text-[10.5px] leading-[2.1] text-mute">
+          {
+            meta.map((row) => (
+              <div class="flex gap-2">
+                <dt class="w-[68px] flex-none text-dim">{row.k}</dt>
+                <dd class:list={["m-0", row.accent && "text-mint"]}>{row.v}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </div>
+
+    <slot name="banner" />
+
+    <div class="grid border-b border-line lg:grid-cols-[220px_1fr]">
+      <nav
+        aria-label={tocTitle}
+        class="toc mono sticky top-[52px] hidden self-start border-r border-line px-6 py-11 text-[10.5px] leading-[2.4] tracking-[0.09em] lg:block"
+      >
+        <div class="mb-3 text-dim">{tocTitle}</div>
+        {
+          toc.map((t, i) => (
+            <>
+              <a href={`#${t.id}`} data-toc>
+                {t.label}
+              </a>
+              {i === tocSplit && <div class="my-3.5 h-px bg-line" />}
+            </>
+          ))
+        }
+      </nav>
+
+      {/* min-w-0 because a grid item defaults to min-width:auto and so refuses to
+          shrink below its widest child — which stopped the failure-case table's
+          own overflow-x-auto from ever engaging, and pushed the page sideways. */}
+      <div class="min-w-0 max-w-[920px] px-5 py-11 pb-[70px] sm:px-8 lg:px-11">
+        <slot />
+      </div>
+    </div>
+  </main>
+
+  <DocFooter />
+</Base>
+
+<script>
+  import "../scripts/doc";
+</script>

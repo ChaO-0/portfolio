@@ -1,0 +1,19 @@
+---
+// The data-model table on each case study: a mono table name against prose.
+interface Props {
+  rows: [string, string][];
+}
+
+const { rows } = Astro.props;
+---
+
+<div data-reveal class="rows mt-7">
+  {
+    rows.map(([name, note]) => (
+      <div>
+        <div class="mono px-[18px] py-3.5 text-[10.5px] text-mint">{name}</div>
+        <div class="px-[18px] py-3.5 text-[15.5px] leading-[1.55] text-mute">{note}</div>
+      </div>
+    ))
+  }
+</div>

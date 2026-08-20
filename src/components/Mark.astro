@@ -1,0 +1,21 @@
+---
+// The mark: a mint disc with a bite out of the right side. Appears in both bars
+// and in the transition panel, so the mask needs a distinct id per instance —
+// duplicate ids on one page make every use resolve to the first one.
+interface Props {
+  id: string;
+  size?: number;
+}
+
+const { id, size = 16 } = Astro.props;
+const mask = `mark-${id}`;
+---
+
+<svg viewBox="0 0 48 48" width={size} height={size} aria-hidden="true" class="flex-none">
+  <mask id={mask}>
+    <rect width="48" height="48" fill="#fff"></rect>
+    <circle cx="24" cy="24" r="8" fill="#000"></circle>
+    <rect x="24" y="18" width="24" height="12" fill="#000"></rect>
+  </mask>
+  <circle cx="24" cy="24" r="24" fill="#57C8A5" mask={`url(#${mask})`}></circle>
+</svg>

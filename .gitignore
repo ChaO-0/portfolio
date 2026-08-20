@@ -19,3 +19,11 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# This repo is public. Working notes that must not be: the business plan, the
+# offer analysis, and a prospect pipeline carrying named contacts with their
+# roles, LinkedIn profiles and email addresses.
+content/
+
+# Agent definitions carry rates, positioning and pipeline context.
+.claude/

@@ -1,65 +1,40 @@
 ---
-import { embedded, pricing, site } from "../data/site";
+import Transition from "../components/Transition.astro";
+import { site } from "../data/site";
 import "../styles/global.css";
 
 interface Props {
   title: string;
   description: string;
+  /** og:type. "profile" only on the page that is about the person. */
+  ogType?: "website" | "profile" | "article";
+  /** Keep the page out of the index. The 404 is a real URL that should never rank. */
+  noindex?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, ogType = "website", noindex = false } = Astro.props;
+
+// The Person is one entity, so it gets described once. Emitting it on every page
+// with that page's description attached said nine different things about the same
+// person; emitting it only where the page is actually about him says one.
+const isPersonPage = ogType === "profile";
 
 // og:image and canonical both require absolute URLs. Astro.site comes from
 // astro.config.mjs, so these follow the domain automatically.
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const ogImage = new URL("/og.png", Astro.site);
 
-// Publishing prices is the unusual part of this business, and prices are exactly
-// the kind of thing worth making machine-readable: not for a rich snippet, Google
-// promises none for a Person, but so search engines and the assistants people now
-// ask for recommendations can answer "what does he charge" without guessing.
-//
-// minPrice, not price, because every fixed tier is advertised "from". Claiming a
-// flat price for a range would be a lie in a machine-readable field, which is the
-// worst place to keep one. Embedded is a real flat monthly rate, so it uses price.
-//
-// Nothing here carries a rating, a review or an aggregate: he has no clients yet,
-// and inventing that markup is both a manual-action risk and false.
-const priceNumber = (v: string) => Number(v.replace(/[^0-9.]/g, ""));
-
-const offers = [
-  ...pricing.map((tier) => ({
-    "@type": "Offer",
-    name: tier.label,
-    description: tier.body,
-    priceSpecification: {
-      "@type": "PriceSpecification",
-      minPrice: priceNumber(tier.price),
-      priceCurrency: "USD",
-    },
-  })),
-  {
-    "@type": "Offer",
-    name: embedded.label,
-    description: embedded.body,
-    priceSpecification: {
-      "@type": "UnitPriceSpecification",
-      price: priceNumber(embedded.price),
-      priceCurrency: "USD",
-      unitCode: "MON", // UN/CEFACT code for month
-    },
-  },
-];
-
 // Person schema is what makes a search for his name resolve to him rather than to
-// a namesake, and it's what feeds a knowledge panel.
+// a namesake, and it's what feeds a knowledge panel. No offers, no ratings: the
+// page publishes no prices and he has no client reviews, and markup that claims
+// either would describe a page that doesn't exist.
 const person = {
   "@context": "https://schema.org",
   "@type": "Person",
   name: site.name,
   jobTitle: site.role,
-  description,
-  url: canonical.href,
+  description: site.bio,
+  url: new URL("/about/", Astro.site).href,
   image: ogImage.href,
   email: `mailto:${site.email}`,
   address: {
@@ -71,14 +46,13 @@ const person = {
   knowsAbout: [
     "TypeScript",
     "Next.js",
-    "NestJS",
     "Node.js",
     "PostgreSQL",
+    "Prisma",
     "SaaS development",
     "Internal tools",
-    "Payments and reconciliation",
+    "System architecture",
   ],
-  makesOffer: offers,
 };
 ---
 
@@ -88,15 +62,15 @@ const person = {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex, follow" /> : <link rel="canonical" href={canonical} />}
     <meta name="generator" content={Astro.generator} />
 
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={site.name} />
-    <meta name="theme-color" content="#0a0e18" />
+    <meta name="theme-color" content="#0B1013" />
 
-    <meta property="og:type" content="profile" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
@@ -119,10 +93,23 @@ const person = {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Space+Grotesk:wght@300..700&family=Geist+Mono:wght@300..600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@300..600&family=JetBrains+Mono:wght@400;500&display=swap"
     />
 
-    <script type="application/ld+json" set:html={JSON.stringify(person)} is:inline />
+    {/* Anything JS fades in starts at opacity 0, which without JS is content that
+        never arrives — on the home page that is the whole pitch and both calls to
+        action. Crawlers that do not run JS see the same empty hero. */}
+    <noscript>
+      <style>
+        [data-hero-fade],
+        [data-hero-panel],
+        [data-fade] {
+          opacity: 1 !important;
+        }
+      </style>
+    </noscript>
+
+    {isPersonPage && <script type="application/ld+json" set:html={JSON.stringify(person)} is:inline />}
 
     {/* Vercel Web Analytics. Vercel's edge serves this path, so it 404s anywhere
         else — including `astro dev`, hence the PROD gate keeping the dev console
@@ -130,6 +117,7 @@ const person = {
     {import.meta.env.PROD && <script is:inline defer src="/_vercel/insights/script.js" />}
   </head>
   <body>
+    <Transition />
     <slot />
   </body>
 </html>

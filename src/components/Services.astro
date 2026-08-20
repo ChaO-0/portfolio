@@ -1,38 +1,52 @@
 ---
-import { services } from "../data/site";
+import { sectionNo, agency, rescue, services } from "../data/site";
+
+// Names only. Descriptions and prices are on /services, one click away in the nav.
+const entries = [
+  ...services.map((s) => ({ label: s.title, href: `/services#${s.id}` })),
+  { label: rescue.title, href: `/services#${rescue.id}` },
+  { label: "Engineering capacity", href: "/for-agencies", tag: "AGENCIES" },
+];
 ---
 
-<section
-  id="services"
-  class="lattice relative z-[2] border-t border-paper/8 bg-ink px-[5vw] py-[120px]"
->
-  <div class="mx-auto max-w-[1500px]">
-    <div class="mb-16 flex items-baseline justify-between">
-      <h2 class="h-sec"><span class="mask"><span>What I build</span></span></h2>
-      <span data-px>01 / SERVICES</span>
-    </div>
+<section id="services" class="section">
+  <div class="eyebrow mb-[30px]">§ {sectionNo("services")}&nbsp;&nbsp;SERVICES</div>
 
-    <div class="hair-grid [grid-template-columns:repeat(auto-fit,minmax(300px,1fr))]">
-      {
-        services.map((s) => (
-          <article data-rv data-rv-fade class="sv spot px-[34px] pt-10 pb-[46px]">
-            <div class="sv-n mb-[26px] font-mono text-[11.5px]/none text-accent">{s.n}</div>
-            <h3 class="h-card mb-3.5">{s.title}</h3>
-            <p class="m-0 mb-[22px] text-[14.5px]/[1.6] text-paper/52 text-pretty">{s.body}</p>
-            <div class="flex flex-wrap gap-[7px]">
-              {s.tags.map((t) => (
-                <span class="tag">{t}</span>
-              ))}
-            </div>
-          </article>
-        ))
-      }
+  <div class="mb-11 grid items-end gap-15 lg:grid-cols-[1fr_340px]">
+    <h2
+      data-reveal
+      class="max-w-[640px] text-[clamp(32px,3.8vw,50px)] leading-[1.04] font-medium tracking-[-0.03em]"
+    >
+      What I can build for you.
+    </h2>
+    <div class="border-l border-line pl-[18px]">
+      <p data-reveal class="text-[14.5px] leading-[1.6] text-mute">
+        Senior engineering, whole system, without the overhead of an agency. If a project needs
+        more hands than it should, I will say so.
+      </p>
+      <a data-reveal href="/services" class="navlink mono mt-4 inline-block text-[10.5px] text-mint"
+        >EVERY SERVICE IN DETAIL →</a
+      >
     </div>
+  </div>
 
-    <p data-rv class="m-0 mt-[34px] max-w-[70ch] text-[14.5px]/[1.6] text-paper/42 text-pretty">
-      You don't need to arrive with designs. Dashboards, admin panels and product UI I lay out
-      cleanly myself, from a brief or a rough sketch. If you already have a designer or a brand
-      system, I'll build to it exactly.
-    </p>
+  <div class="hairgrid sm:grid-cols-2">
+    {
+      entries.map((e, i) => (
+        <a
+          data-reveal
+          href={e.href}
+          class:list={[
+            "card flex items-baseline gap-4 px-[22px] py-[19px]",
+            i === entries.length - 1 && "sm:col-span-full",
+          ]}
+        >
+          <span class="mono text-[10px] text-mint">
+            {e.tag ?? String(i + 1).padStart(2, "0")}
+          </span>
+          <span class="text-[21px] tracking-[-0.02em]">{e.label}</span>
+        </a>
+      ))
+    }
   </div>
 </section>

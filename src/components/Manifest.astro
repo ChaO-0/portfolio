@@ -1,0 +1,21 @@
+---
+// Label over value in a hairline grid: the stack manifest on each case study and
+// the stack breakdown on /about are the same table with different rows in it.
+interface Props {
+  rows: { label: string; items: string }[];
+  class?: string;
+}
+
+const { rows, class: cls } = Astro.props;
+---
+
+<div data-reveal class:list={["hairgrid mono text-[11px] sm:grid-cols-2", cls]}>
+  {
+    rows.map((r) => (
+      <div class="px-[18px] py-4">
+        <div class="mb-[7px] text-dim">{r.label}</div>
+        <div class="leading-[1.9] text-paper">{r.items}</div>
+      </div>
+    ))
+  }
+</div>

@@ -1,0 +1,71 @@
+---
+import { sectionNo, nodes } from "../data/site";
+
+const total = String(nodes.length).padStart(2, "0");
+---
+
+<section id="systems" class="section">
+  <div class="eyebrow mb-[30px]">§ {sectionNo("systems")}&nbsp;&nbsp;SYSTEMS</div>
+
+  <div class="grid items-start gap-15 lg:grid-cols-[1fr_420px]">
+    <div>
+      <h2
+        data-reveal
+        class="max-w-[620px] text-[clamp(32px,3.8vw,50px)] leading-[1.04] font-medium tracking-[-0.03em]"
+      >
+        Boring architecture, chosen on purpose.
+      </h2>
+
+      <p data-reveal class="mt-7 max-w-[560px] text-[17.5px] leading-[1.62] text-mute">
+        Every product I build has roughly the same spine. A typed client, one API surface, a
+        relational database that holds the truth, a cache where reads get expensive, background
+        workers for anything slow, and a small number of third-party services at the edges.
+      </p>
+
+      <p data-reveal class="mt-5 max-w-[560px] text-[17.5px] leading-[1.62] text-mute">
+        The interesting decisions are never which framework. They are where state lives, what
+        happens when a third party is down, and which parts you will regret in a year. I write
+        those down before writing code.
+      </p>
+
+      <a data-reveal href="/systems" class="btn-ghost mt-[34px] px-[19px] py-[13px] text-[10.5px]">
+        HOW I THINK ABOUT ARCHITECTURE →
+      </a>
+
+      <div data-reveal class="mono mt-[26px] text-[10px] text-dim">
+        THE DIAGRAM IS LIVE · IT GROWS AS YOU SCROLL AND FOLLOWS YOUR CURSOR
+      </div>
+    </div>
+
+    {/* Legend for the three.js spine behind the page: one row per node, lit in order. */}
+    <div data-reveal class="border border-line bg-panel/70 backdrop-blur-[3px]">
+      <div
+        class="mono flex justify-between border-b border-line px-[18px] py-3.5 text-[9.5px] tracking-[0.12em] text-mint"
+      >
+        <span>FIG.03 / NODE LEGEND</span><span id="node-active">01 / {total}</span>
+      </div>
+
+      {
+        nodes.map((n, i) => (
+          <div
+            data-node
+            class:list={[
+              "grid grid-cols-[34px_1fr] gap-3.5 px-[18px] py-[15px] transition-colors duration-300 data-on:bg-mint/[0.06]",
+              i < nodes.length - 1 && "border-b border-line",
+            ]}
+          >
+            {/* Lit is the default so the legend reads correctly with no JS; the
+                spine dims the nodes the scroll hasn't reached yet. */}
+            <span class="mono text-[10px] text-mint data-dim:text-edge" data-num>
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <div>
+              <div class="mb-[3px] text-[14.5px] font-medium">{n.title}</div>
+              <div class="text-[13px] leading-[1.5] text-mute">{n.body}</div>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

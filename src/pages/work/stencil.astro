@@ -1,0 +1,158 @@
+---
+import { Image } from "astro:assets";
+import { projects, site } from "../../data/site";
+import Cta from "../../components/Cta.astro";
+import DataRows from "../../components/DataRows.astro";
+import Flow from "../../components/Flow.astro";
+import Manifest from "../../components/Manifest.astro";
+import Doc from "../../layouts/Doc.astro";
+
+const stencil = projects[2];
+
+const toc = [
+  { id: "problem", label: "01  THE PROBLEM" },
+  { id: "architecture", label: "02  ARCHITECTURE" },
+  { id: "data", label: "03  DATA MODEL" },
+  { id: "stack", label: "04  STACK" },
+];
+
+const meta = [
+  { k: "PRODUCT", v: "Stencil" },
+  { k: "ROLE", v: "Everything" },
+  { k: "TENANCY", v: "Row level security" },
+  { k: "STACK", v: "Next.js · Supabase" },
+  { k: "DATA", v: "Postgres" },
+];
+
+// No API tier of its own: the client talks to Postgres through Supabase, and the
+// database decides what it is allowed to see.
+const flow = [
+  { name: "CLIENT", note: "next.js", lit: true },
+  { name: "SUPABASE", note: "typed client" },
+  { name: "RLS", note: "35 policies" },
+  { name: "POSTGRES", note: "source of truth", lit: true },
+];
+
+const tables = [
+  [
+    "inquiries",
+    "Seven states. The funnel is the product, so the states earn their own type rather than living as booleans.",
+  ],
+  [
+    "bookings",
+    "Its own five-state life, linked to the enquiry that produced it but surviving that enquiry being deleted.",
+  ],
+  [
+    "clients",
+    "Deduplicated on a generated, digits-only copy of the phone number, indexed per artist.",
+  ],
+  [
+    "payments",
+    "Integer cents, checked positive, with the method recorded as cash, transfer, card or other. Money is recorded here, not processed.",
+  ],
+  [
+    "reminders",
+    "One row per intended message with a scheduled time and a pending, sent or failed status, so a message that never went is visible rather than assumed.",
+  ],
+];
+
+const manifest = [
+  { label: "CLIENT", items: "Next.js · React · Tailwind · shadcn" },
+  { label: "FORMS", items: "react-hook-form · Zod" },
+  { label: "DATA", items: "Postgres · Supabase · RLS" },
+  { label: "SERVICES", items: "Resend · Vercel · next-intl" },
+];
+---
+
+<Doc
+  title={`Stencil case study · ${site.name}`}
+  description="How Stencil was built: thirty-five row level security policies instead of application filters, and constraints that make an invalid row unreachable."
+  ogType="article"
+  label="CASE STUDY 03 / STENCIL"
+  back={{ href: "/work", label: "WORK INDEX" }}
+  meta={meta}
+  tocTitle="Contents"
+  toc={toc}
+>
+  <Fragment slot="headline">
+    <div class="eyebrow mb-[26px]">OWN PRODUCT &nbsp;·&nbsp; IN PRODUCTION &nbsp;·&nbsp; 2026</div>
+    <h1
+      class="max-w-[820px] text-[clamp(44px,6vw,84px)] leading-[0.96] font-medium tracking-[-0.04em]"
+    >
+      <span class="line"><span data-line class="block">The database is</span></span>
+      <span class="line"
+        ><span data-line class="block">the <span class="text-mint">application</span>.</span></span
+      >
+    </h1>
+  </Fragment>
+
+  <div data-mask slot="banner" class="overflow-hidden border-b border-line bg-panel">
+    <Image
+      src={stencil.shot}
+      alt="Stencil request pipeline"
+      widths={[900, 1400, 1900]}
+      sizes="100vw"
+      class="block h-[520px] w-full object-cover object-left-top"
+    />
+  </div>
+
+  <section id="problem" class="scroll-mt-[90px]">
+    <div class="eyebrow mb-5">01&nbsp;&nbsp;THE PROBLEM</div>
+    <h2 data-reveal class="text-[34px] leading-[1.12] font-medium tracking-[-0.025em]">
+      A tattoo studio is several businesses sharing a calendar.
+    </h2>
+    <p data-reveal class="mt-[22px] text-lg leading-[1.65] text-mute">
+      Artists take their own enquiries, quote their own work, keep their own clients and their own
+      income, and share a studio, a diary and a front desk. Software that treats the studio as one
+      account gets the calendar right and the money wrong. Software that treats each artist as an
+      island cannot show the studio a week.
+    </p>
+    <p data-reveal class="mt-[18px] text-lg leading-[1.65] text-mute">
+      So the question is not what the screens look like. It is who is allowed to see which row, and
+      whether that answer is enforced somewhere a missing filter cannot undo.
+    </p>
+    <div data-reveal class="mt-7 border-l-2 border-mint bg-mint/5 py-3.5 pl-5">
+      <div class="text-[17px] leading-[1.6] text-paper">
+        The constraint I set: no query written in the app should be able to return another studio's
+        row, even if I write it badly.
+      </div>
+    </div>
+  </section>
+
+  <section id="architecture" class="mt-[70px] scroll-mt-[90px]">
+    <div class="eyebrow mb-5">02&nbsp;&nbsp;ARCHITECTURE</div>
+    <h2 data-reveal class="text-[34px] leading-[1.12] font-medium tracking-[-0.025em]">
+      No API tier, on purpose.
+    </h2>
+    <p data-reveal class="mt-[22px] text-lg leading-[1.65] text-mute">
+      A Next.js app talking to Postgres through Supabase, with no service of my own in between. That
+      only works because the authorisation lives in the database: without row level security this
+      shape would be one forgotten filter away from a leak, and I would have had to build the tier
+      back. This is the opposite call to ClassPortal, where the domain was wide enough that a NestJS
+      API earned its keep.
+    </p>
+
+    <Flow fig="FIG. 02.1 / SYSTEM" nodes={flow} notes={["AUTHORISATION IS A POLICY ON THE TABLE, NOT A CLAUSE IN A QUERY","13 TABLES, ALL WITH RLS ON, 35 POLICIES BETWEEN THEM"]} />
+  </section>
+
+  <section id="data" class="mt-[70px] scroll-mt-[90px]">
+    <div class="eyebrow mb-5">03&nbsp;&nbsp;DATA MODEL</div>
+    <h2 data-reveal class="text-[34px] leading-[1.12] font-medium tracking-[-0.025em]">
+      Thirteen tables, and the database says no.
+    </h2>
+    <p data-reveal class="mt-[22px] text-lg leading-[1.65] text-mute">
+      Every table carries its own policies, its own checks and its own foreign keys with the
+      deletion behaviour spelled out. A booking outlives the enquiry it came from; a client outlives
+      the payment that referenced them.
+    </p>
+
+    <DataRows rows={tables} />
+  </section>
+
+  <section id="stack" class="mt-[70px] scroll-mt-[90px]">
+    <div class="eyebrow mb-5">04&nbsp;&nbsp;STACK MANIFEST</div>
+    <Manifest rows={manifest} />
+  </section>
+
+  <Cta heading="Need multi-tenant data that cannot leak?" layout="inline" />
+</Doc>

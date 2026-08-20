@@ -1,0 +1,146 @@
+---
+import { Image } from "astro:assets";
+import { facts, portraitShot, site, stack } from "../data/site";
+import Cta from "../components/Cta.astro";
+import Manifest from "../components/Manifest.astro";
+import Doc from "../layouts/Doc.astro";
+
+const toc = [
+  { id: "background", label: "01  BACKGROUND" },
+  { id: "how", label: "02  HOW I WORK" },
+  { id: "stack", label: "03  THE STACK" },
+  { id: "where", label: "04  WHERE I AM" },
+];
+
+const meta = [
+  { k: "BASED", v: "Bali · UTC+8" },
+  { k: "REPLIES", v: "Same day" },
+  { k: "SINCE", v: "5 years in production" },
+  { k: "STATUS", v: "Available now", accent: true },
+];
+---
+
+<Doc
+  title={`About · ${site.name}`}
+  description="Five years shipping production software across a blockchain company, a fintech and an agency, plus a competitive CTF background. One senior engineer, working remotely from Bali."
+  ogType="profile"
+  label="ABOUT"
+  back={{ href: "/", label: site.name.toUpperCase() }}
+  meta={meta}
+  tocTitle="Contents"
+  toc={toc}
+>
+  <Fragment slot="headline">
+    <div class="eyebrow mb-[26px]">THE ENGINEER BEHIND THE SYSTEMS</div>
+    <h1
+      class="max-w-[860px] text-[clamp(42px,5.8vw,80px)] leading-[0.97] font-medium tracking-[-0.04em]"
+    >
+      <span class="line"><span data-line class="block">One engineer,</span></span>
+      <span class="line"
+        ><span data-line class="block">responsible <span class="text-mint">end to end</span>.</span
+        ></span
+      >
+    </h1>
+    <p class="mt-[30px] max-w-[620px] text-[18.5px] leading-[1.6] text-mute">
+      I would rather own a whole system than a ticket in someone else's. That is what I am offering:
+      one senior engineer who designs it, builds it, deploys it and is still there when it breaks.
+    </p>
+  </Fragment>
+
+  <section id="background" class="scroll-mt-[90px]">
+    <div class="eyebrow mb-5">01&nbsp;&nbsp;BACKGROUND</div>
+
+    <div class="grid gap-8 sm:grid-cols-[300px_1fr]">
+      <div>
+        <div data-mask class="frame overflow-hidden p-0">
+          <Image
+            src={portraitShot}
+            alt={site.name}
+            widths={[300, 600]}
+            sizes="(min-width: 640px) 300px, 92vw"
+            class="h-[340px] contrast-[1.03] grayscale-[0.35]"
+          />
+        </div>
+        <div class="figcap">
+          <span>C. YU / BALI</span><span>FIG. 01</span>
+        </div>
+      </div>
+
+      <div>
+        <p data-reveal class="text-[17.5px] leading-[1.62] text-mute">
+          I studied computer science and have spent five years shipping production software: a year
+          at a blockchain company where mistakes are public and expensive, three at a fintech where
+          the ledger has to balance every time, and a year at an agency where the deadline is the
+          deadline.
+        </p>
+        <p data-reveal class="mt-5 text-[17.5px] leading-[1.62] text-mute">
+          Three very different rooms, one job in all of them: make the thing work, and keep it
+          working after launch week.
+        </p>
+        <p data-reveal class="mt-5 text-[17.5px] leading-[1.62] text-mute">
+          Before any of it I played CTF competitively. A strange hobby that turned out to be useful:
+          I spent years looking for the ways software breaks, so I write it differently. The
+          security pass happens while the code is being written, not in an audit six months later.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" class="mt-[70px] scroll-mt-[90px] border-t border-line pt-[52px]">
+    <div class="eyebrow mb-5">02&nbsp;&nbsp;HOW I WORK</div>
+    <h2 data-reveal class="text-[34px] leading-[1.12] font-medium tracking-[-0.025em]">
+      One person, the whole system.
+    </h2>
+    <p data-reveal class="mt-[22px] max-w-[680px] text-lg leading-[1.65] text-mute">
+      I work remotely from Bali, on UTC+8. That is a full working day alongside Asia-Pacific and an
+      afternoon-to-evening overlap with Europe and the UK, so a same-day reply is normal rather than
+      a promise. Where the clock does not line up, I say so before we start rather than after.
+    </p>
+    <p data-reveal class="mt-[18px] max-w-[680px] text-lg leading-[1.65] text-mute">
+      Everything on this site I designed, built and deployed myself. I build my own products because
+      it is the fastest way to stay good at all of it: the interface, the schema, the deploy
+      pipeline, the boring parts that decide whether software survives contact with users.
+    </p>
+    <p data-reveal class="mt-[18px] max-w-[680px] text-lg leading-[1.65] text-mute">
+      You talk to the person writing the code. There is no account manager translating a brief into
+      a ticket and back again, and nothing gets handed to someone you have not met.
+      <a href="/systems" class="text-mint">How I think about architecture</a> is written down, and so
+      is <a href="/services#how" class="text-mint">how a project actually runs</a>.
+    </p>
+  </section>
+
+  <section id="stack" class="mt-[70px] scroll-mt-[90px] border-t border-line pt-[52px]">
+    <div class="eyebrow mb-5">03&nbsp;&nbsp;THE STACK</div>
+    <h2 data-reveal class="text-[34px] leading-[1.12] font-medium tracking-[-0.025em]">
+      One language, chosen so there is nothing to translate.
+    </h2>
+    <p data-reveal class="mt-[22px] max-w-[680px] text-lg leading-[1.65] text-mute">
+      TypeScript from the database client to the browser, so a type defined once is enforced
+      everywhere. The rest is deliberately unremarkable.
+    </p>
+
+    <Manifest rows={stack} class="mt-7" />
+  </section>
+
+  <section id="where" class="mt-[70px] scroll-mt-[90px] border-t border-line pt-[52px]">
+    <div class="eyebrow mb-5">04&nbsp;&nbsp;WHERE I AM</div>
+    <h2 data-reveal class="text-[34px] leading-[1.12] font-medium tracking-[-0.025em]">
+      Remote, from Bali.
+    </h2>
+
+    <dl data-reveal class="hairgrid mono mt-7 text-[10.5px] sm:grid-cols-2">
+      {
+        facts.map((f) => (
+          <div class:list={["px-4 py-3.5", f.wide && "sm:col-span-full"]}>
+            <dt class="mb-1.5 text-dim">{f.label}</dt>
+            <dd class:list={["m-0", f.accent && "text-mint", f.wide && "leading-[1.8]"]}>
+              {f.value}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </section>
+
+  <Cta heading="Tell me what you are building." />
+</Doc>

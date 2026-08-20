@@ -1,0 +1,139 @@
+---
+import { Image } from "astro:assets";
+import DocBar from "../../components/DocBar.astro";
+import DocFooter from "../../components/DocFooter.astro";
+import { projects, site } from "../../data/site";
+import Base from "../../layouts/Base.astro";
+---
+
+<Base
+  title={`Work · ${site.name}`}
+  description="Three products designed, built and deployed end to end: Monark, ClassPortal and Stencil. The write-ups are about decisions, not features."
+>
+  <DocBar label="WORK INDEX" back={{ href: "/", label: site.name.toUpperCase() }} />
+
+  <main>
+    <div class="px-5 pt-[116px] pb-15 sm:px-8 lg:px-11 lg:pt-[130px]">
+      <div class="eyebrow mb-7">INDEX&nbsp;&nbsp;03 SYSTEMS</div>
+      <h1
+        class="max-w-[900px] text-[clamp(40px,5.6vw,76px)] leading-[0.99] font-medium tracking-[-0.04em]"
+      >
+        <span class="line"><span data-line class="block">Everything here I designed,</span></span>
+        <span class="line"
+          ><span data-line class="block"
+            >built and <span class="text-mint">deployed</span> myself.</span
+          ></span
+        >
+      </h1>
+      <p class="mt-8 max-w-[600px] text-lg leading-[1.6] text-mute">
+        Three products, all my own. Each exists because I wanted the whole system in my hands,
+        interface through to infrastructure. The write-ups below are about decisions, not features.
+      </p>
+    </div>
+
+    {/* One row per product, full bleed. The row is a link only where there is
+        somewhere to go: two of the three case studies are not written yet. */}
+    <div class="border-t border-line">
+      {
+        projects.map((p, i) => {
+          // A row without a write-up yet points at the live app rather than at
+          // nothing, because a working product is the better proof either way.
+          const to = p.caseStudy ? p.index : p.href;
+          const external = to.startsWith("http");
+          return (
+            <a
+              href={to}
+              {...(external && { target: "_blank", rel: "noopener" })}
+              class="row grid items-center gap-6 border-b border-line px-5 py-[30px] sm:px-8 lg:grid-cols-[70px_1.1fr_1fr_300px_60px] lg:px-11"
+            >
+              <span class:list={["mono text-[11px]", p.caseStudy ? "text-mint" : "text-dim"]}>
+                {String(i + 1).padStart(2, "0")}
+              </span>
+
+              <div>
+                <div class="text-[38px] font-medium tracking-[-0.03em]">{p.title}</div>
+                <div class="mono mt-[7px] text-[10px] text-dim">{p.category}</div>
+              </div>
+
+              <div class="text-[15.5px] leading-[1.55] text-mute">{p.blurb}</div>
+
+              <div
+                data-mask
+                class:list={[
+                  "overflow-hidden border bg-panel p-1.5",
+                  p.caseStudy ? "border-mint/30" : "border-line",
+                ]}
+              >
+                <Image
+                  src={p.shot}
+                  alt={p.title}
+                  widths={[300, 600]}
+                  sizes="300px"
+                  class="block h-[120px] w-full object-cover object-left-top"
+                />
+              </div>
+
+              <span
+                class:list={[
+                  "mono text-[11px] lg:text-right",
+                  p.caseStudy ? "text-mint" : "text-mute",
+                ]}
+              >
+                {p.caseStudy ? (
+                  <>
+                    CASE
+                    <br class="hidden lg:inline" /> STUDY →
+                  </>
+                ) : (
+                  <>
+                    LIVE
+                    <br class="hidden lg:inline" /> APP →
+                  </>
+                )}
+              </span>
+            </a>
+          );
+        })
+      }
+    </div>
+
+    <div
+      class="grid items-end gap-15 px-5 pt-[70px] pb-20 sm:px-8 lg:grid-cols-[1fr_380px] lg:px-11"
+    >
+      <div>
+        <h2
+          data-reveal
+          class="max-w-[620px] text-[clamp(30px,3.6vw,46px)] leading-[1.05] font-medium tracking-[-0.03em]"
+        >
+          Want the same thing built for your product?
+        </h2>
+        <p data-reveal class="mt-6 max-w-[540px] text-[17.5px] leading-[1.6] text-mute">
+          Tell me what it is and roughly when you need it. I will reply with an honest read on
+          scope.
+        </p>
+      </div>
+      <div data-reveal class="flex flex-col gap-2.5">
+        <a
+          href={`mailto:${site.email}`}
+          class="btn justify-between px-[26px] py-5 text-[12.5px] tracking-[0.06em]"
+        >
+          {site.email} <span>→</span>
+        </a>
+        <a
+          href={site.calendly}
+          target="_blank"
+          rel="noopener"
+          class="btn-ghost justify-between px-[26px] py-[18px] text-xs tracking-[0.06em]"
+        >
+          BOOK 30 MINUTES <span>→</span>
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <DocFooter />
+</Base>
+
+<script>
+  import "../../scripts/doc";
+</script>

@@ -1,0 +1,36 @@
+---
+import { nav, site } from "../data/site";
+import Mark from "./Mark.astro";
+---
+
+<header
+  id="topbar"
+  class="mono fixed top-0 right-0 left-0 z-[25] flex items-center justify-between gap-4 border-b border-line bg-ink/85 px-5 py-[15px] text-[10.5px] tracking-[0.11em] text-mute backdrop-blur-md sm:px-8 lg:left-[74px]"
+>
+  <a href="#hero" class="flex items-center gap-[11px] whitespace-nowrap">
+    <Mark id="nav" />
+    {site.name.toUpperCase()}
+    <span class="hidden text-dim md:inline">· {site.role.toUpperCase()}</span>
+  </a>
+
+  <nav id="navlinks" class="flex items-center gap-[22px]">
+    {
+      nav.map((item, i) => (
+        <>
+          {item.home && !nav[i - 1]?.home && (
+            <span class="hidden h-3 w-px bg-line lg:inline-block" aria-hidden="true" />
+          )}
+          <a href={item.href} class="navlink hidden lg:inline">
+            {item.label.toUpperCase()}
+          </a>
+        </>
+      ))
+    }
+    {/* .btn so it wipes like every other mint control; the dot uses bg-current so
+        it follows the label from ink to mint instead of vanishing into the fill. */}
+    <a href="#contact" class="btn gap-[7px] px-[11px] py-[7px] text-[10.5px]">
+      <span class="size-[5px] animate-[blip_2.2s_infinite] rounded-full bg-current"></span>
+      AVAILABLE NOW
+    </a>
+  </nav>
+</header>

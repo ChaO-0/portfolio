@@ -1,108 +1,56 @@
 ---
 import { Image } from "astro:assets";
-import { projects } from "../data/site";
+import { sectionNo, projects } from "../data/site";
+
+// A teaser, not the portfolio. One line per product with a thumbnail, and the
+// detail lives on /work and the case studies.
 ---
 
-<section id="work" class="lattice relative z-[2] border-t border-paper/8 bg-ink">
-  <!-- ScrollTrigger pins this and scrubs #workTrack sideways (desktop only) -->
-  <div id="workSticky" class="flex h-screen flex-col justify-center overflow-hidden">
-    <div class="flex flex-none items-baseline justify-between px-[5vw] pt-[104px]">
-      <h2 class="h-sec"><span class="mask"><span>Selected work</span></span></h2>
-      <span data-px>02 / PRODUCTS</span>
-    </div>
+<section id="work" class="section">
+  <div class="eyebrow mb-[30px]">§ {sectionNo("work")}&nbsp;&nbsp;SELECTED WORK</div>
 
-    <div id="workTrack" class="flex flex-1 items-center will-change-transform">
-      {
-        projects.map((p) => (
-          <article class="wp box-border grid w-screen flex-none items-center gap-[5vw] px-[5vw] [grid-template-columns:1.1fr_.9fr]">
-            <div class="wp-t order-2">
-              <div class="mb-5 flex items-baseline gap-4">
-                <span class="font-mono text-xs/none text-accent">{p.n}</span>
-                <span class="font-mono text-[11.5px]/none text-paper/35">{p.meta}</span>
-              </div>
-              <h3 class="h-proj mb-[18px]">{p.title}</h3>
-              <p class="m-0 mb-[26px] max-w-[42ch] text-[16px]/[1.6] text-paper/55 text-pretty">
-                {p.body}
-              </p>
-              <div class="mb-[26px] flex flex-wrap gap-[7px]">
-                {p.tags.map((t) => (
-                  <span class="tag">{t}</span>
-                ))}
-              </div>
-              <a
-                href={p.href}
-                target="_blank"
-                rel="noopener"
-                class="link inline-flex items-center gap-2 font-mono text-[13px]/none font-medium"
-              >
-                {p.host} <span class="wp-a">↗</span>
-              </a>
-            </div>
-
-            {/* the cursor ring labels this VIEW, so it has to actually go somewhere */}
-            <a href={p.href} target="_blank" rel="noopener" class="frame">
-              <span aria-hidden="true" /><span aria-hidden="true" /><span aria-hidden="true" /><span
-                aria-hidden="true"
-              />
-              <div class="frame-i">
-                <div class="flex items-center gap-3.5 border-b border-paper/10 bg-paper/4 px-3.5 py-[11px]">
-                  <div class="flex gap-1.5">
-                    <span class="size-[9px] rounded-full bg-paper/22" />
-                    <span class="size-[9px] rounded-full bg-paper/22" />
-                    <span class="size-[9px] rounded-full bg-paper/22" />
-                  </div>
-                  <div class="flex-1 rounded-[5px] bg-ink/60 px-2.5 py-1.5 text-center font-mono text-[10.5px]/none text-paper/40">
-                    {p.host}
-                  </div>
-                </div>
-                <Image
-                  src={p.shot}
-                  alt={`${p.title} interface`}
-                  widths={[720, 1100, 1600]}
-                  sizes="(max-width: 899px) 90vw, 46vw"
-                  class="block w-full"
-                />
-              </div>
-            </a>
-          </article>
-        ))
-      }
-    </div>
-
-    <div class="flex flex-none items-center gap-5 px-[5vw] pb-11">
-      <div class="flex gap-3.5 font-mono text-xs/none">
-        {projects.map((p, i) => <span class="wr" data-on={i === 0 ? "" : undefined}>{p.n}</span>)}
-      </div>
-      <div class="relative h-px flex-1 bg-paper/12">
-        <div
-          id="workBar"
-          class="absolute -top-px left-0 h-[3px] w-full origin-left scale-x-0 bg-accent"
-        >
-        </div>
-      </div>
-      <span class="font-mono text-[11px]/none text-paper/30">SCROLL →</span>
+  <div class="mb-[42px] grid items-end gap-14 lg:grid-cols-[1fr_330px]">
+    <h2
+      data-reveal
+      class="max-w-[680px] text-[clamp(32px,3.8vw,50px)] leading-[1.03] font-medium tracking-[-0.03em]"
+    >
+      Three systems, designed and shipped end to end.
+    </h2>
+    <div class="border-l border-line pl-[18px]">
+      <p data-reveal class="text-[14.5px] leading-[1.6] text-mute">
+        All three are my own products. There are no client logos yet, so the portfolio is the code,
+        the decisions and the trade-offs behind each one.
+      </p>
+      <a data-reveal href="/work" class="navlink mono mt-4 inline-block text-[10.5px] text-mint"
+        >ALL THREE, IN DETAIL →</a
+      >
     </div>
   </div>
-</section>
 
-<style>
-  /* No pin below 900px, and none when motion is reduced — in both cases the
-     track has to stack, or the h-screen overflow:hidden would hide two panels. */
-  @media (max-width: 899px), (prefers-reduced-motion: reduce) {
-    #workSticky {
-      height: auto;
-      overflow: visible;
-    }
-    #workTrack {
-      flex-direction: column;
-      gap: 80px;
-    }
-    .wp {
-      width: 100%;
-      grid-template-columns: 1fr;
-    }
-    .wp-t {
-      order: 0;
-    }
+  {
+    projects.map((p, i) => (
+      <a
+        data-reveal
+        href={p.index}
+        class:list={[
+          "row grid items-center gap-5 border-t border-line py-6 lg:grid-cols-[52px_minmax(0,1fr)_minmax(0,1.15fr)_158px_88px]",
+          i === projects.length - 1 && "border-b",
+        ]}
+      >
+        <span class="mono text-[11px] text-mint">{String(i + 1).padStart(2, "0")}</span>
+        <span class="text-[34px] font-medium tracking-[-0.03em]">{p.title}</span>
+        <span class="text-[15px] leading-[1.5] text-mute">{p.teaser}</span>
+        <span class="block h-14 overflow-hidden border border-line bg-panel">
+          <Image
+            src={p.shot}
+            alt={p.title}
+            widths={[160, 320]}
+            sizes="158px"
+            class="block h-full w-full object-cover object-left-top"
+          />
+        </span>
+        <span class="mono text-[10px] text-dim lg:text-right">INSPECT →</span>
+      </a>
+    ))
   }
-</style>
+</section>

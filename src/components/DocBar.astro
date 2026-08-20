@@ -1,0 +1,33 @@
+---
+import { site } from "../data/site";
+import Mark from "./Mark.astro";
+
+interface Props {
+  /** Centre label naming the current page, e.g. "SYSTEMS". */
+  label: string;
+  back: { href: string; label: string };
+}
+
+const { label, back } = Astro.props;
+---
+
+<header
+  class="mono fixed top-0 right-0 left-0 z-[25] flex items-center justify-between gap-4 border-b border-line bg-ink/90 px-5 py-[15px] text-[10.5px] tracking-[0.11em] text-mute backdrop-blur-md sm:px-8"
+>
+  <a href={back.href} class="navlink flex items-center gap-2.5 whitespace-nowrap">
+    <Mark id="doc" size={15} />
+    {back.label}
+  </a>
+
+  <span class="hidden text-mint md:inline">{label}</span>
+
+  <div class="flex items-center gap-2.5">
+    <a
+      href={site.calendly}
+      target="_blank"
+      rel="noopener"
+      class="btn-ghost px-[11px] py-1.5 text-[10.5px]">BOOK A CALL</a
+    >
+    <a href={`mailto:${site.email}`} class="btn px-[11px] py-[7px] text-[10.5px]">EMAIL ME</a>
+  </div>
+</header>
