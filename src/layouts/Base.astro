@@ -22,7 +22,11 @@ const isPersonPage = ogType === "profile";
 // og:image and canonical both require absolute URLs. Astro.site comes from
 // astro.config.mjs, so these follow the domain automatically.
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const ogImage = new URL("/og.png", Astro.site);
+// Bump when the image changes. Scrapers key on the whole URL, and X and LinkedIn
+// hold a card for about a week, so without this a new image is invisible on every
+// link already shared. The file itself stays at /og.png.
+const OG_VERSION = 2;
+const ogImage = new URL(`/og.png?v=${OG_VERSION}`, Astro.site);
 
 // Person schema is what makes a search for his name resolve to him rather than to
 // a namesake, and it's what feeds a knowledge panel. No offers, no ratings: the
